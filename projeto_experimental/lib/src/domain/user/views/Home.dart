@@ -11,12 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Login extends StatefulWidget {
+class Home extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _HomeState createState() => _HomeState();
 }
 
-class _LoginState extends State<Login> {
+class _HomeState extends State<Home> {
   _addId(dynamic userId, dynamic userName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('userId', userId);
