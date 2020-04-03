@@ -101,20 +101,15 @@ class _LoginState extends State<Login> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                // Container(
-                //   padding: EdgeInsets.only(top: 77.0),
-                //   child: CircleAvatar(
-                //     backgroundColor: Colors.white,
-                //     child: Image(
-                //       width: 135,
-                //       height: 135,
-                //       image: AssetImage('assets/images/vemrodar.png'),
-                //     ),
-                //   ),
-                //   width: 170.0,
-                //   height: 170.0,
-                //   decoration: BoxDecoration(shape: BoxShape.circle),
-                // ),
+                Container(
+                  //padding: EdgeInsets.only(top: 77.0),
+                  child: Image(                    
+                    image: AssetImage('./lib/src/assets/images/youtubeReverse.png'),
+                  ),                
+                  width: 150.0,
+                  height: 150.0,
+                  decoration: BoxDecoration(shape: BoxShape.circle),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 25.0),
                   width: MediaQuery.of(context).size.width / 1.1,
