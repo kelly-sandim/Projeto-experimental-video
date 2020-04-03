@@ -39,7 +39,7 @@ class _SendVideoState extends State<SendVideo> {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.send, size: 40, color: MyColors.grey), 
             onPressed: () {
-              
+
             }),          
         ],
         backgroundColor: MyColors.white,
@@ -64,7 +64,7 @@ class _SendVideoState extends State<SendVideo> {
                 ),
                 Container(                
                   margin: EdgeInsets.only(top: 25.0),
-                  width: MediaQuery.of(context).size.width / 1.1,
+                  width: MediaQuery.of(context).size.width / 1,
                   padding:
                       EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
                   decoration: BoxDecoration(
@@ -84,7 +84,7 @@ class _SendVideoState extends State<SendVideo> {
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
+                  width: MediaQuery.of(context).size.width / 1,
                   margin: EdgeInsets.only(top: 20),
                   padding:
                       EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
