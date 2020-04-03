@@ -11,12 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class WaitAnalysis extends StatefulWidget {
+class Result extends StatefulWidget {
   @override
-  _WaitAnalysisState createState() => _WaitAnalysisState();
+  _ResultState createState() => _ResultState();
 }
 
-class _WaitAnalysisState extends State<WaitAnalysis> {  
+class _ResultState extends State<Result> {  
   
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
     return Scaffold(
       backgroundColor: MyColors.white,      
       appBar: AppBar(
-        title: Text("Aguarde...", style: TextStyle(color: MyColors.grey)),        
+        title: Text("Resultados", style: TextStyle(color: MyColors.grey)),        
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
       ),
@@ -49,35 +49,22 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
                   width: 140.0,
                   height: 140.0,                  
                 ),
-                Padding(padding: EdgeInsets.only(top: 30)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                      child: 
-                        Text(
-                          "Seu vídeo está sendo processado e a análise do vídeo sairá em instantes...",
-                          style: TextStyle(fontSize: 22, color: MyColors.grey, fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,                     
-                        ),
-                    ),
-                  ],
-                ), 
-                //TEMPORÁRIO
+                Padding(padding: EdgeInsets.only(top: 30)),                
+                
                 Container(
                   width: MediaQuery.of(context).size.width / 1.1,
                   height: 60,
                   margin: const EdgeInsets.only(top: 25.0),
                   child: FlatButton(                    
                     child: Text(
-                      'Ir para a próxima página',
+                      'Voltar para Home',
                       style: TextStyle(color: MyColors.white, fontSize: 20.0),
                     ),
                     color: MyColors.primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/Result');
+                      Navigator.pushReplacementNamed(context, '/Home');
                     },
                   ),
                 ),
