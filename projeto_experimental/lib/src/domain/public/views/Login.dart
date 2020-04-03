@@ -70,7 +70,7 @@ class _LoginState extends State<Login> {
     //     var nomeResumido = response['nome'].split(" ");
     //     var driverName = nomeResumido[0] + " " + nomeResumido[1];
     //     _addId(response['id'], driverName);
-        Navigator.pushReplacementNamed(context, '/HomeView');
+        Navigator.pushReplacementNamed(context, '/Home');
     //   }
     //   return response;
     // } catch (e) {
@@ -117,28 +117,27 @@ class _LoginState extends State<Login> {
                 // ),
                 Container(
                   margin: EdgeInsets.only(top: 25.0),
-                  width: MediaQuery.of(context).size.width / 1.2,
+                  width: MediaQuery.of(context).size.width / 1.1,
                   padding:
                       EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: MyColors.white,
                       ),
                   child: TextFormField(
                     controller: controllerUser,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
-                        hintText: 'Usuário'),
+                        hintText: 'E-mail'),
                   ),
                 ),
                 Container(
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  height: 50,
-                  margin: EdgeInsets.only(top: 32),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  margin: EdgeInsets.only(top: 20),
                   padding:
                       EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(50)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: MyColors.white,
                       ),
                   child: TextField(
@@ -164,16 +163,17 @@ class _LoginState extends State<Login> {
                 ),
 
                 Container(
-                  margin: const EdgeInsets.only(top: 20.0),
-                  child: MaterialButton(
-                    height: 50.0,
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  height: 60,
+                  margin: const EdgeInsets.only(top: 25.0),
+                  child: FlatButton(                    
                     child: Text(
-                      'Login',
+                      'LOGIN',
                       style: TextStyle(color: MyColors.primaryColor, fontSize: 20.0),
                     ),
                     color: MyColors.white,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
+                        borderRadius: BorderRadius.circular(10)),
                     onPressed: () {
                       _login();
                     },
@@ -181,23 +181,23 @@ class _LoginState extends State<Login> {
                 ),
                 // ),
                 Padding(padding: EdgeInsets.only(top: 60)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Ao prosseguir com o Login, você concorda com os nossos  ",
-                      style: TextStyle(fontSize: 8, color: Colors.white),
-                    ),
-                    InkWell(
-                        child: Text("Termos de Uso",
-                            style: TextStyle(
-                                fontSize: 8,
-                                decoration: TextDecoration.underline,
-                                color: Colors.white)),
-                        onTap: () => launch(
-                            "${DotEnv().env['URL_VEMRODAR']}/app/google_terms.php"))
-                  ],
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: <Widget>[
+                //     Text(
+                //       "Ao prosseguir com o Login, você concorda com os nossos  ",
+                //       style: TextStyle(fontSize: 8, color: Colors.white),
+                //     ),
+                //     InkWell(
+                //         child: Text("Termos de Uso",
+                //             style: TextStyle(
+                //                 fontSize: 8,
+                //                 decoration: TextDecoration.underline,
+                //                 color: Colors.white)),
+                //         onTap: () => launch(
+                //             "${DotEnv().env['URL_VEMRODAR']}/app/google_terms.php"))
+                //   ],
+                // ),
               ],
               //),
             ),

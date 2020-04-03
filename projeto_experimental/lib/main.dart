@@ -14,7 +14,7 @@ Future<void> main() async {
   await DotEnv().load('.envProduction');
   WidgetsFlutterBinding.ensureInitialized();  
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  var driverId = prefs.getString('id_parceiro');
+  var userId = prefs.getString('userId');
   runApp(MaterialApp(
     //theme: ThemeData(fontFamily: 'Roboto'),
     localizationsDelegates: [
@@ -24,7 +24,7 @@ Future<void> main() async {
     supportedLocales: [const Locale('pt', 'BR')],
     debugShowCheckedModeBanner: true,
     title: 'Projeto Experimental',
-    home: driverId == null ? Login() : new Home(),
+    home: userId == null ? Login() : new Home(),
     routes: RouterConfig.routes,
   ));
 }
