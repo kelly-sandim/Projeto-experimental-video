@@ -41,12 +41,15 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
             child: Column(
               children: <Widget>[
                 Container(
-                  //padding: EdgeInsets.only(top: 77.0),
-                  child: CircularProgressIndicator(),        
-                  width: 125.0,
-                  height: 125.0,                  
+                  padding: EdgeInsets.only(top: 10),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 15,
+                    valueColor: new AlwaysStoppedAnimation<Color>(MyColors.primaryColor),                   
+                  ),        
+                  width: 140.0,
+                  height: 140.0,                  
                 ),
-                Padding(padding: EdgeInsets.only(top: 25)),
+                Padding(padding: EdgeInsets.only(top: 30)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
