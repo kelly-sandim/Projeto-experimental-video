@@ -39,7 +39,7 @@ class _SendVideoState extends State<SendVideo> {
         actions: <Widget>[
           IconButton(icon: Icon(Icons.send, size: 40, color: MyColors.grey), 
             onPressed: () {
-
+              Navigator.pushReplacementNamed(context, '/WaitAnalysis');
             }),          
         ],
         backgroundColor: MyColors.white,
