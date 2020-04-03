@@ -36,7 +36,11 @@ class _HomeState extends State<Home> {
             fit: BoxFit.cover, height: 35),
         title: Text("YouFace", style: TextStyle(color: MyColors.grey)),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.videocam, size: 40, color: MyColors.grey), onPressed: () {}),          
+          IconButton(icon: Icon(Icons.videocam, size: 40, color: MyColors.grey), 
+            onPressed: () {
+              /*TEMPORARIAMENTE*/
+              Navigator.pushReplacementNamed(context, '/SendVideo');
+            }),          
         ],
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
