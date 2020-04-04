@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:video_player/video_player.dart';
 
 import '../../../../src/assets/colors/MyColors.dart';
-//import 'package:app_vem_rodar_motorista/src/domain/public/api/PublicApi.dart';
+import '../api/VideoApi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
