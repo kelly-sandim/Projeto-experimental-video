@@ -19,6 +19,17 @@ class SendVideo extends StatefulWidget {
 class _SendVideoState extends State<SendVideo> {  
   TextEditingController controllerTitle = new TextEditingController();
   TextEditingController controllerDescription = new TextEditingController();
+  
+  String videoPath;
+
+  _getData() async 
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      controllerTitle.text = prefs.getString('videoName');
+      videoPath = prefs.getString('videoPath');     
+    });
+  }
 
   @override
   void initState() {
@@ -27,6 +38,7 @@ class _SendVideoState extends State<SendVideo> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    _getData();
   }
 
   @override
@@ -72,6 +84,7 @@ class _SendVideoState extends State<SendVideo> {
                       color: MyColors.white,
                       ),
                   child: TextFormField(
+                    enabled: false,
                     controller: controllerTitle,
                     decoration: InputDecoration(                        
                         hintText: 'Título',
