@@ -37,9 +37,8 @@ class _HomeState extends State<Home> {
         title: Text("YouFace", style: TextStyle(color: MyColors.grey)),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.videocam, size: 40, color: MyColors.grey), 
-            onPressed: () {
-              /*TEMPORARIAMENTE*/
-              Navigator.pushReplacementNamed(context, '/SendVideo');
+            onPressed: () {              
+              Navigator.pushNamed(context, '/RecordVideo');
             }),          
         ],
         backgroundColor: MyColors.white,
