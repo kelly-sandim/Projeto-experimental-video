@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 import 'dart:async';
 import 'dart:convert';
@@ -21,14 +22,19 @@ class _SendVideoState extends State<SendVideo> {
   TextEditingController controllerTitle = new TextEditingController();
   TextEditingController controllerDescription = new TextEditingController();
   VideoPlayerController controllerVideo;
+  File videoFile;
   String videoPath;
+  String userId;
+  String base64Video = "";
+  String messageError;
 
   _getData(_initVideo) async 
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       controllerTitle.text = prefs.getString('videoName');
-      videoPath = prefs.getString('videoPath');     
+      videoPath = prefs.getString('videoPath'); 
+      videoFile = new File(videoPath);    
     });
 
     _initVideo();
@@ -46,6 +52,54 @@ class _SendVideoState extends State<SendVideo> {
     controllerVideo.play();
   }
 
+  _uploadVideo(_callWaitAnalysis) async
+  {    
+    userId = "1";
+    if (videoFile != null)
+    {
+      setState(() {        
+        base64Video = base64Encode(videoFile.readAsBytesSync());
+        print(base64Video);
+      });
+    }
+
+    var responseUpload = await new VideoApi().uploadVideo(userId, controllerTitle.text, base64Video);
+    var response = jsonDecode(responseUpload.toString());
+    if (response['status'] != 200) {
+      setState(() {
+        messageError = response['error'];
+        _showDialog();
+      });
+    } else {
+      _callWaitAnalysis();
+    }    
+  }
+
+  _callWaitAnalysis()
+  {
+    Navigator.pushReplacementNamed(context, '/WaitAnalysis');
+  }
+
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Erro!"),
+          content: new Text(messageError),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -55,6 +109,7 @@ class _SendVideoState extends State<SendVideo> {
     ]);    
     _getData(_initVideo);
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +117,11 @@ class _SendVideoState extends State<SendVideo> {
       backgroundColor: MyColors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: Text("Adicionar detalhes", style: TextStyle(color: MyColors.grey)),
+        leading: Text("Adicionar detalhes", style: TextStyle(color: MyColors.grey)),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.send, size: 40, color: MyColors.grey), 
             onPressed: () {
-              Navigator.pushReplacementNamed(context, '/WaitAnalysis');
+              _uploadVideo(_callWaitAnalysis);
             }),          
         ],
         backgroundColor: MyColors.white,
