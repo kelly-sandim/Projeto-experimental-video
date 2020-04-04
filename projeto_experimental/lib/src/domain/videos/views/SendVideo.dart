@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'dart:async';
 import 'dart:convert';
+import 'package:video_player/video_player.dart';
 
 import '../../../../src/assets/colors/MyColors.dart';
 //import 'package:app_vem_rodar_motorista/src/domain/public/api/PublicApi.dart';
@@ -19,16 +20,30 @@ class SendVideo extends StatefulWidget {
 class _SendVideoState extends State<SendVideo> {  
   TextEditingController controllerTitle = new TextEditingController();
   TextEditingController controllerDescription = new TextEditingController();
-  
+  VideoPlayerController controllerVideo;
   String videoPath;
 
-  _getData() async 
+  _getData(_initVideo) async 
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       controllerTitle.text = prefs.getString('videoName');
       videoPath = prefs.getString('videoPath');     
     });
+
+    _initVideo();
+  }
+
+  _initVideo()
+  {
+    controllerVideo = VideoPlayerController.network(videoPath);
+
+    controllerVideo.addListener(() {
+      setState(() {});
+    });
+    controllerVideo.setLooping(true);
+    controllerVideo.initialize().then((_) => setState(() {}));
+    controllerVideo.play();
   }
 
   @override
@@ -37,8 +52,8 @@ class _SendVideoState extends State<SendVideo> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-    ]);
-    _getData();
+    ]);    
+    _getData(_initVideo);
   }
 
   @override
@@ -66,13 +81,18 @@ class _SendVideoState extends State<SendVideo> {
             child: Column(
               children: <Widget>[
                 Container(
-                  //padding: EdgeInsets.only(top: 77.0),
-                  child: Image(                    
-                    image: AssetImage('./lib/src/assets/images/youtube.png'),
-                  ),                
-                  width: 250.0,
-                  height: 250.0,
-                  decoration: BoxDecoration(shape: BoxShape.circle),
+                  padding: const EdgeInsets.all(20),
+                  child: AspectRatio(
+                    aspectRatio: controllerVideo.value.aspectRatio,
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: <Widget>[
+                        VideoPlayer(controllerVideo),
+                        _PlayPauseOverlay(controller: controllerVideo),
+                        VideoProgressIndicator(controllerVideo, allowScrubbing: true),
+                      ],
+                    ),
+                  ),
                 ),
                 Container(                
                   margin: EdgeInsets.only(top: 25.0),
@@ -124,6 +144,41 @@ class _SendVideoState extends State<SendVideo> {
             ),
           ),      
       ),
+    );
+  }
+}
+
+class _PlayPauseOverlay extends StatelessWidget {
+  const _PlayPauseOverlay({Key key, this.controller}) : super(key: key);
+
+  final VideoPlayerController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 50),
+          reverseDuration: Duration(milliseconds: 200),
+          child: controller.value.isPlaying
+              ? SizedBox.shrink()
+              : Container(
+                  color: Colors.black26,
+                  child: Center(
+                    child: Icon(
+                      Icons.play_arrow,
+                      color: Colors.white,
+                      size: 100.0,
+                    ),
+                  ),
+                ),
+        ),
+        GestureDetector(
+          onTap: () {
+            controller.value.isPlaying ? controller.pause() : controller.play();
+          },
+        ),
+      ],
     );
   }
 }
