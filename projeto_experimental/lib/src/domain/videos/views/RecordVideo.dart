@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:camera/camera.dart';
 import 'package:video_player/video_player.dart';
 
+import 'package:path_provider/path_provider.dart';
 import '../../../../src/assets/colors/MyColors.dart';
 //import 'package:app_vem_rodar_motorista/src/domain/public/api/PublicApi.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class _RecordVideoState extends State<RecordVideo> {
 
   /*********************************** VARIABLES *************************************/ 
   String videoName;
+  String videoPath;
   CameraController controllerCamera;  
   List<CameraDescription> cameraList;
   int selectedCameraIdx;
@@ -99,7 +102,14 @@ class _RecordVideoState extends State<RecordVideo> {
   void _onStopButtonPressed() {
     _stopVideoRecording(_callSendVideo).then((_) {
       if (mounted) setState(() {});
-
+        Fluttertoast.showToast(
+          msg: 'Video recorded to $videoPath',
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIos: 1,
+          backgroundColor: Colors.grey,
+          textColor: Colors.white
+        );
     });
   }
 
@@ -122,12 +132,17 @@ class _RecordVideoState extends State<RecordVideo> {
       return null;
     }
 
+    final Directory appDirectory = await getApplicationDocumentsDirectory();
+    final String videoDirectory = '${appDirectory.path}/Videos';
+    await Directory(videoDirectory).create(recursive: true);
     final String currentTime = DateTime.now().millisecondsSinceEpoch.toString();
     final String fileName = '$currentTime.mp4';
+    final String filePath = '$videoDirectory/$currentTime.mp4';
 
     try {
       await controllerCamera.startVideoRecording(fileName);  
-      videoName = fileName;    
+      videoName = fileName; 
+      videoPath = filePath;   
     } on CameraException catch (e) {
       _showCameraException(e);
       return null;
@@ -145,6 +160,7 @@ class _RecordVideoState extends State<RecordVideo> {
       await controllerCamera.stopVideoRecording();
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('videoName', videoName);
+      prefs.setString('videoPath', videoPath);
 
       _callSendVideo();
       
@@ -190,7 +206,7 @@ class _RecordVideoState extends State<RecordVideo> {
 
       if (cameraList.length > 0) {
         setState(() {
-          selectedCameraIdx = 0;
+          selectedCameraIdx = 1;
         });
 
         _onCameraSwitched(cameraList[selectedCameraIdx]).then((void v) {});
@@ -249,9 +265,9 @@ class _RecordVideoState extends State<RecordVideo> {
   IconData _getCameraLensIcon(CameraLensDirection direction) {
     switch (direction) {
       case CameraLensDirection.back:
-        return Icons.camera_rear;
-      case CameraLensDirection.front:
         return Icons.camera_front;
+      case CameraLensDirection.front:
+        return Icons.camera_rear;
       case CameraLensDirection.external:
         return Icons.camera;
       default:
@@ -295,8 +311,9 @@ class _RecordVideoState extends State<RecordVideo> {
             icon: Icon(
                 _getCameraLensIcon(lensDirection)
             ),
-            label: Text("${lensDirection.toString()
-                .substring(lensDirection.toString().indexOf('.')+1)}")
+            label: lensDirection.toString()
+            .substring(lensDirection.toString().indexOf('.')+1) == "back" ? Text("Frontal") 
+                                                                          : Text("Traseira")
         ),
       ),
     );
