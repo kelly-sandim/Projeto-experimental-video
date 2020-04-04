@@ -96,8 +96,15 @@ class _RecordVideoState extends State<RecordVideo> {
             textColor: Colors.white
         );
       }
+      //dá um tempo de 30 sec de gravação
+      Timer timer;
+      timer = Timer.periodic(Duration(seconds: 30), (Timer t) { 
+          _onStopButtonPressed();
+          timer.cancel();
+      });      
     });
   }
+  
 
   void _onStopButtonPressed() {
     _stopVideoRecording(_callSendVideo).then((_) {
@@ -329,23 +336,23 @@ class _RecordVideoState extends State<RecordVideo> {
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             IconButton(
-              icon: const Icon(Icons.videocam),
-              color: Colors.blue,
+              icon: const Icon(Icons.videocam, size: 40),
+              color: MyColors.primaryColor,
               onPressed: controllerCamera != null &&
                   controllerCamera.value.isInitialized &&
                   !controllerCamera.value.isRecordingVideo
                   ? _onRecordButtonPressed
                   : null,
             ),
-            IconButton(
-              icon: const Icon(Icons.stop),
-              color: Colors.red,
-              onPressed: controllerCamera != null &&
-                  controllerCamera.value.isInitialized &&
-                  controllerCamera.value.isRecordingVideo
-                  ? _onStopButtonPressed
-                  : null,
-            )
+            // IconButton(
+            //   icon: const Icon(Icons.stop),
+            //   color: Colors.red,
+            //   onPressed: controllerCamera != null &&
+            //       controllerCamera.value.isInitialized &&
+            //       controllerCamera.value.isRecordingVideo
+            //       ? _onStopButtonPressed
+            //       : null,
+            // )
           ],
         ),
       ),
