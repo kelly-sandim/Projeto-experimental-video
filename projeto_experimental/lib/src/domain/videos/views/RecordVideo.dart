@@ -4,7 +4,6 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:camera/camera.dart';
-import 'package:video_player/video_player.dart';
 
 import 'package:path_provider/path_provider.dart';
 import '../../../../src/assets/colors/MyColors.dart';
@@ -85,8 +84,8 @@ class _RecordVideoState extends State<RecordVideo> {
   }
 
   void _onRecordButtonPressed() {
-    _startVideoRecording().then((String fileName) {
-      if (fileName != null) {
+    _startVideoRecording().then((String filePath) {
+      if (filePath!= null) {
         Fluttertoast.showToast(
             msg: 'Recording video started',
             toastLength: Toast.LENGTH_SHORT,
@@ -147,7 +146,7 @@ class _RecordVideoState extends State<RecordVideo> {
     final String filePath = '$videoDirectory/$currentTime.mp4';
 
     try {
-      await controllerCamera.startVideoRecording(fileName);  
+      await controllerCamera.startVideoRecording(filePath);        
       videoName = fileName; 
       videoPath = filePath;   
     } on CameraException catch (e) {
@@ -344,15 +343,15 @@ class _RecordVideoState extends State<RecordVideo> {
                   ? _onRecordButtonPressed
                   : null,
             ),
-            // IconButton(
-            //   icon: const Icon(Icons.stop),
-            //   color: Colors.red,
-            //   onPressed: controllerCamera != null &&
-            //       controllerCamera.value.isInitialized &&
-            //       controllerCamera.value.isRecordingVideo
-            //       ? _onStopButtonPressed
-            //       : null,
-            // )
+            IconButton(
+              icon: const Icon(Icons.stop, size: 40),
+              color: MyColors.primaryColor,
+              onPressed: controllerCamera != null &&
+                  controllerCamera.value.isInitialized &&
+                  controllerCamera.value.isRecordingVideo
+                  ? _onStopButtonPressed
+                  : null,
+            )
           ],
         ),
       ),
