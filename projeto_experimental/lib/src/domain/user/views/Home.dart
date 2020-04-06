@@ -17,18 +17,39 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {  
-  int currentIndex = 0;
-
-   List<Widget> tabList = [
-    Container(
-      color: MyColors.white
-    ),
-    Container(
-      color: MyColors.white,
-    ),
-  ];
-
+  int currentIndex = 0;   
   TabController tabController;
+
+  List<Widget> tabList(BuildContext context) 
+  {
+    List<Widget> _tabList = [
+      Container(
+        color: MyColors.white,
+        child: Row(
+          children: <Widget>[
+            
+          ],
+        )
+      ),
+      Container(
+        color: MyColors.white,
+        child: ListView(
+          children: <Widget>[
+            new ListTile(
+              title: new Text("Logout", style: TextStyle(color: MyColors.primaryColor, fontSize: 18, fontWeight: FontWeight.bold),),
+              leading: new Icon(Icons.power_settings_new, color: MyColors.primaryColor, size: 30),            
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/Login');
+              },
+            ),
+            new Divider(),
+          ],
+        )
+      ),
+    ];
+
+    return _tabList;
+  }
 
   @override
   void initState() {
@@ -37,7 +58,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    tabController = TabController(vsync: this, length: tabList.length);
+    tabController = TabController(vsync: this, length: 2);
   }
 
   @override
@@ -66,7 +87,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: tabController,
-        children: tabList,
+        children: tabList(context),
       ),
       bottomNavigationBar: BottomNavigationBar(        
         currentIndex: currentIndex,
@@ -88,7 +109,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           BottomNavigationBarItem(
             title: Text("Configurações", style: TextStyle(color: currentIndex == 1 ? MyColors.primaryColor : MyColors.grey, fontSize: 18)),
             icon: Icon(Icons.settings, color: MyColors.grey),
-            activeIcon: Icon(Icons.video_library, color: MyColors.primaryColor),
+            activeIcon: Icon(Icons.settings, color: MyColors.primaryColor),
           )
         ],
       ),
