@@ -9,8 +9,8 @@ class HttpConfig {
     if (!this.instance) {
       BaseOptions options = new BaseOptions(
         baseUrl: DotEnv().env['URL_API'],
-        connectTimeout: 5000,
-        receiveTimeout: 3000,
+        connectTimeout: 13000,
+        receiveTimeout: 15000,
       );
 
       this.http = new Dio(options);
