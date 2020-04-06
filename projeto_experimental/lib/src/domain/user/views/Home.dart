@@ -16,7 +16,20 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {  
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {  
+  int currentIndex = 0;
+
+   List<Widget> tabList = [
+    Container(
+      color: MyColors.white,
+    ),
+    Container(
+      color: MyColors.white,
+    ),
+  ];
+
+  TabController tabController;
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +37,13 @@ class _HomeState extends State<Home> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    tabController = TabController(vsync: this, length: tabList.length);
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,11 +64,32 @@ class _HomeState extends State<Home> {
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
       ),
-      body: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },        
+      body: TabBarView(
+        controller: tabController,
+        children: tabList,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: MyColors.primaryColor,
+        currentIndex: currentIndex,
+        onTap: (currentIndex){
+
+          setState(() {
+            currentIndex = currentIndex;
+          });
+
+            tabController.animateTo(currentIndex);
+
+        },
+        items: [
+          BottomNavigationBarItem(
+            title: Text("Meus vídeos", style: TextStyle(color: MyColors.grey)),
+            icon: Icon(Icons.video_library, color: MyColors.grey)
+          ),
+          BottomNavigationBarItem(
+            title: Text("Configurações", style: TextStyle(color: MyColors.grey)),
+            icon: Icon(Icons.settings, color: MyColors.grey)
+          )
+        ],
       ),
     );
   }
