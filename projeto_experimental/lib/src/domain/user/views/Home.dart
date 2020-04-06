@@ -21,7 +21,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
    List<Widget> tabList = [
     Container(
-      color: MyColors.white,
+      color: MyColors.white
     ),
     Container(
       color: MyColors.white,
@@ -68,13 +68,12 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         controller: tabController,
         children: tabList,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: MyColors.primaryColor,
+      bottomNavigationBar: BottomNavigationBar(        
         currentIndex: currentIndex,
-        onTap: (currentIndex){
+        onTap: (index) {
 
           setState(() {
-            currentIndex = currentIndex;
+            currentIndex = index;
           });
 
             tabController.animateTo(currentIndex);
@@ -82,12 +81,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         },
         items: [
           BottomNavigationBarItem(
-            title: Text("Meus vídeos", style: TextStyle(color: MyColors.grey)),
-            icon: Icon(Icons.video_library, color: MyColors.grey)
+            title: Text("Meus vídeos", style: TextStyle(color: currentIndex == 0 ? MyColors.primaryColor : MyColors.grey, fontSize: 18)),
+            icon: Icon(Icons.video_library, color: MyColors.grey),
+            activeIcon: Icon(Icons.video_library, color: MyColors.primaryColor),
           ),
           BottomNavigationBarItem(
-            title: Text("Configurações", style: TextStyle(color: MyColors.grey)),
-            icon: Icon(Icons.settings, color: MyColors.grey)
+            title: Text("Configurações", style: TextStyle(color: currentIndex == 1 ? MyColors.primaryColor : MyColors.grey, fontSize: 18)),
+            icon: Icon(Icons.settings, color: MyColors.grey),
+            activeIcon: Icon(Icons.video_library, color: MyColors.primaryColor),
           )
         ],
       ),
