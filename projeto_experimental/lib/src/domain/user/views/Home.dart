@@ -23,6 +23,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   TabController tabController;
   List<VideoPlayerController> controllerVideoList =
       new List<VideoPlayerController>();
+  List<String> titleVideoList = 
+      new List<String>();
   String messageError;
   bool isLoading = true;
 
@@ -55,7 +57,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                   new ListTile(
                                     leading: Icon(Icons.play_circle_filled,
                                         color: MyColors.grey, size: 30),
-                                    title: Text("Vídeo 1",
+                                    title: Text(titleVideoList[index],
                                         style: TextStyle(
                                             color: MyColors.grey,
                                             fontWeight: FontWeight.bold,
@@ -129,6 +131,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     } else {
       for (var item in response["videos"]) {
         controllerVideoList.add(new VideoPlayerController.network(item));
+        var urlSplitted = item.split("/");
+        titleVideoList.add(urlSplitted[urlSplitted.length-1]);
       }
 
       for (var item in controllerVideoList) {
