@@ -48,8 +48,7 @@ class _SendVideoState extends State<SendVideo> {
       setState(() {});
     });    
     controllerVideo.setLooping(false);
-    controllerVideo.initialize().then((_) => setState(() {}));
-    controllerVideo.play();
+    controllerVideo.initialize().then((_) => setState(() {}));    
   }
 
   _uploadVideo(_callWaitAnalysis) async
