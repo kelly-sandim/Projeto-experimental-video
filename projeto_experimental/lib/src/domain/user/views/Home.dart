@@ -140,8 +140,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           setState(() {});
         });
         item.setLooping(false);
-        item.initialize().then((_) => setState(() {}));
-        //item.play();
+        item.initialize().then((_) => setState(() {}));        
       }
 
       setState(() {
