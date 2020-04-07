@@ -46,14 +46,40 @@ class _SendVideoState extends State<SendVideo> {
 
     controllerVideo.addListener(() {
       setState(() {});
-    });
-    controllerVideo.setLooping(true);
+    });    
+    controllerVideo.setLooping(false);
     controllerVideo.initialize().then((_) => setState(() {}));
     controllerVideo.play();
   }
 
   _uploadVideo(_callWaitAnalysis) async
-  {    
+  {  
+    var isLoading = true;
+
+    isLoading ? showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            width: MediaQuery.of(context).size.width /2.5,
+            height:  70,
+            child:
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                new Padding(padding: EdgeInsets.only(right: 10.0)),
+                new CircularProgressIndicator(),
+                new Padding(padding: EdgeInsets.only(right: 26.0)),
+                new Text("Enviando o vídeo,\n por favor, aguarde..."),
+              ],
+            ),
+          ),
+        );
+      },
+    ) : Offstage();
+
     userId = "1";
     if (videoFile != null)
     {
@@ -67,10 +93,18 @@ class _SendVideoState extends State<SendVideo> {
     var response = jsonDecode(responseUpload.toString());
     if (response['status'] != 200) {
       setState(() {
+        isLoading = false;
+      });
+
+      setState(() {
         messageError = response['error'];
         _showDialog();
       });
     } else {
+      setState(() {
+        isLoading = false;
+      });
+
       _callWaitAnalysis();
     }    
   }
