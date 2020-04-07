@@ -117,6 +117,7 @@ class _SendVideoState extends State<SendVideo> {
       backgroundColor: MyColors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Adicionar detalhes", style: TextStyle(color: MyColors.grey)),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.send, size: 40, color: MyColors.grey), 

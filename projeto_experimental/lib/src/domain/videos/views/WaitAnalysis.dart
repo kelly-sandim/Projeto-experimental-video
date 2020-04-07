@@ -32,6 +32,7 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
     return Scaffold(
       backgroundColor: MyColors.white,      
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Aguarde...", style: TextStyle(color: MyColors.grey)),        
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
