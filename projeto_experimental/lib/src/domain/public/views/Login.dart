@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../../../../src/assets/colors/MyColors.dart';
-//import 'package:app_vem_rodar_motorista/src/domain/public/api/PublicApi.dart';
+import '../api/PublicApi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -17,17 +17,18 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  _addId(dynamic userId, dynamic userName) async {
+  _addId(dynamic userId, dynamic userEmail) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('userId', userId);
-    prefs.setString('userName', userName);
+    prefs.setString('userEmail', userEmail);
   }
 
-  TextEditingController controllerUser = new TextEditingController();
+  TextEditingController controllerEmail = new TextEditingController();
   TextEditingController controllerPass = new TextEditingController();
 
   String message = '';
   bool _obscureText = true;
+
   void _showDialog() {
     showDialog(
       context: context,
@@ -37,7 +38,7 @@ class _LoginState extends State<Login> {
           content: new Text(message),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("OK"),
+              child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -56,26 +57,24 @@ class _LoginState extends State<Login> {
   }
 
   Future<dynamic> _login() async {
-    // try {
-    //   var response =
-    //       await new PublicApi().login(controllerUser, controllerPass);
-    //   response = jsonDecode(response.data.toString());
+    try {
+      var responseLogin =
+          await new PublicApi().login(controllerEmail, controllerPass);
+      var response = jsonDecode(responseLogin.toString());
 
-    //   if (response['code'] == "error") {
-    //     setState(() {
-    //       message = response['message'];
-    //       _showDialog();
-    //     });
-    //   } else {
-    //     var nomeResumido = response['nome'].split(" ");
-    //     var driverName = nomeResumido[0] + " " + nomeResumido[1];
-    //     _addId(response['id'], driverName);
+      if (response['status'] != 200) {
+        setState(() {
+          message = response['error'];
+          _showDialog();
+        });
+      } else {       
+        _addId(response['user_data']['id'], response['user_data']['email']);
         Navigator.pushReplacementNamed(context, '/Home');
-    //   }
-    //   return response;
-    // } catch (e) {
-    //   return showLongToast();
-    // }
+      }
+      return response;
+    } catch (e) {
+      return showLongToast();
+    }
   }
 
   @override
@@ -120,7 +119,7 @@ class _LoginState extends State<Login> {
                       color: MyColors.white,
                       ),
                   child: TextFormField(
-                    controller: controllerUser,
+                    controller: controllerEmail,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
                         hintText: 'E-mail'),
