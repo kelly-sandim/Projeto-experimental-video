@@ -73,7 +73,14 @@ class _ResultState extends State<Result> {
     return Scaffold(
       backgroundColor: MyColors.white,      
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back, color: MyColors.grey, size: 25),
+              onPressed: () { Navigator.pushReplacementNamed(context, '/Home'); },              
+            );
+          },
+        ),        
         title: Text("Resultados", style: TextStyle(color: MyColors.grey)),        
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
@@ -275,23 +282,6 @@ class _ResultState extends State<Result> {
                   height: 250,
                 ),               
                 
-                Container(
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  height: 60,
-                  margin: const EdgeInsets.only(top: 25.0),
-                  child: FlatButton(                    
-                    child: Text(
-                      'Voltar para Home',
-                      style: TextStyle(color: MyColors.white, fontSize: 20.0),
-                    ),
-                    color: MyColors.primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/Home');
-                    },
-                  ),
-                ),
                 Padding(padding: EdgeInsets.only(top: 30)), 
               ],
             ),
