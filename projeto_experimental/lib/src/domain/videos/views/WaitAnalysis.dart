@@ -43,10 +43,7 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(top: 10),
-                  child: CircularProgressIndicator(
-                    strokeWidth: 15,
-                    valueColor: new AlwaysStoppedAnimation<Color>(MyColors.primaryColor),                   
-                  ),        
+                  child: Image.asset('./lib/src/assets/animations/loadingGears.gif'),   
                   width: 140.0,
                   height: 140.0,                  
                 ),
