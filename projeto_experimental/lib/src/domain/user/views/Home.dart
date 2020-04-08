@@ -27,6 +27,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       new List<String>();
   String messageError;
   bool isLoading = true;
+  var userId;
 
   List<Widget> tabList(BuildContext context) {
     List<Widget> _tabList = [
@@ -104,7 +105,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                 ),
                 leading: new Icon(Icons.power_settings_new,
                     color: MyColors.primaryColor, size: 30),
-                onTap: () {
+                onTap: () async {
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  prefs.clear();
                   Navigator.pushReplacementNamed(context, '/LoginPage');
                 },
               ),
@@ -116,8 +119,16 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
     return _tabList;
   }
 
-  _loadVideoList() async {
-    var userId = "1";
+  _loadData(_loadVideoList) async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userId = prefs.getString('userId');
+    });
+    _loadVideoList(userId);  
+  }
+
+  _loadVideoList(var userId) async {    
     var responseGet = await new VideoApi().getVideos(userId);
     var response = jsonDecode(responseGet.toString());
 
@@ -142,11 +153,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         item.setLooping(false);
         item.initialize().then((_) => setState(() {}));          
       }
-
-      setState(() {
-        isLoading = false;
-      });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void _showDialog() {
@@ -158,7 +168,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           content: new Text(messageError),
           actions: <Widget>[
             new FlatButton(
-              child: new Text("OK"),
+              child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -177,7 +187,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       DeviceOrientation.portraitDown,
     ]);
     tabController = TabController(vsync: this, length: 2);
-    _loadVideoList();
+    _loadData(_loadVideoList);
   }
 
   @override
