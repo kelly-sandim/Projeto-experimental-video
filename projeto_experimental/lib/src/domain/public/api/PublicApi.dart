@@ -3,9 +3,10 @@ import 'dart:convert';
 import '../../../HttpConfig.dart';
 
 class PublicApi extends HttpConfig {
-  login(userName, userPassword) => 
+  login(userEmail, userPassword) => 
     this.http.post("/testes/smartemotion/app/api/users/auth.php", data: {
-      "usuario": userName.toString(),
+      "token": "token",
+      "email": userEmail.toString(),
       "senha": userPassword.toString()
     });
 }
