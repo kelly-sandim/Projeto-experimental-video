@@ -142,6 +142,15 @@ class _SendVideoState extends State<SendVideo> {
     ]);    
     _getData(_initVideo);
   }
+
+  @override
+  void dispose() {
+    // Ensure disposing of the VideoPlayerController to free up resources.
+    controllerVideo.dispose();
+
+    super.dispose();
+  }
+
   
 
   @override

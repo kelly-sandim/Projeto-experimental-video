@@ -183,6 +183,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   void dispose() {
     tabController.dispose();
+    for (var item in controllerVideoList) {
+      item.dispose();          
+    }
     super.dispose();
   }
 
