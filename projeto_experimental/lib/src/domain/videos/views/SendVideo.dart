@@ -32,6 +32,7 @@ class _SendVideoState extends State<SendVideo> {
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      userId = prefs.getString('userId');
       controllerTitle.text = prefs.getString('videoName');
       videoPath = prefs.getString('videoPath'); 
       videoFile = new File(videoPath);    
@@ -78,8 +79,7 @@ class _SendVideoState extends State<SendVideo> {
         );
       },
     ) : Offstage();
-
-    userId = "1";
+    
     if (videoFile != null)
     {
       setState(() {        

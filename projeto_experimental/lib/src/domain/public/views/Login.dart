@@ -17,17 +17,17 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  _addId(dynamic userId, dynamic userEmail) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('userId', userId);
-    prefs.setString('userEmail', userEmail);
-  }
-
   TextEditingController controllerEmail = new TextEditingController();
   TextEditingController controllerPass = new TextEditingController();
 
   String message = '';
   bool _obscureText = true;
+
+  _addId(dynamic userId, dynamic userEmail) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('userId', userId);
+    prefs.setString('userEmail', userEmail);
+  }
 
   void _showDialog() {
     showDialog(
