@@ -33,9 +33,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       isLoading
         ? Center(
             child: CircularProgressIndicator(
-                strokeWidth: 8,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(MyColors.primaryColor)),
+              strokeWidth: 8,
+              valueColor:
+                  new AlwaysStoppedAnimation<Color>(MyColors.primaryColor)),
           )
         : Container(
             color: MyColors.white,

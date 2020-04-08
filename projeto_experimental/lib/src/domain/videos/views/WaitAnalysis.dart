@@ -50,14 +50,14 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
                   width: 140.0,
                   height: 140.0,                  
                 ),
-                Padding(padding: EdgeInsets.only(top: 30)),
+                Padding(padding: EdgeInsets.only(top: 30)),                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Expanded(
                       child: 
                         Text(
-                          "Seu vídeo está sendo processado e a análise do vídeo sairá em instantes...",
+                          "Seu vídeo será sendo processado e você será notificado(a) quando a análise estiver pronta.",
                           style: TextStyle(fontSize: 22, color: MyColors.grey, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,                     
                         ),
@@ -71,14 +71,14 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
                   margin: const EdgeInsets.only(top: 25.0),
                   child: FlatButton(                    
                     child: Text(
-                      'Ir para a próxima página',
+                      'Voltar para Home',
                       style: TextStyle(color: MyColors.white, fontSize: 20.0),
                     ),
                     color: MyColors.primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/Result');
+                      Navigator.pushReplacementNamed(context, '/Home');
                     },
                   ),
                 ),

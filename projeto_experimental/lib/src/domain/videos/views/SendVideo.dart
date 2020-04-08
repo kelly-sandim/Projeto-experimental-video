@@ -181,7 +181,7 @@ class _SendVideoState extends State<SendVideo> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: AspectRatio(
-                    aspectRatio: controllerVideo.value.aspectRatio,
+                    aspectRatio: controllerVideo.value.aspectRatio,                    
                     child: Stack(
                       alignment: Alignment.bottomCenter,
                       children: <Widget>[
