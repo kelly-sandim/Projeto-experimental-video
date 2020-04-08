@@ -43,9 +43,10 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(top: 10),
-                  child: Image.asset('./lib/src/assets/animations/loadingGears.gif'),   
-                  width: 140.0,
-                  height: 140.0,                  
+                  child: Image.asset('./lib/src/assets/other/loadingGears.gif',
+                      fit: BoxFit.cover,),   
+                  width: 180.0,
+                  height: 180.0,                  
                 ),
                 Padding(padding: EdgeInsets.only(top: 30)),                
                 Row(
@@ -54,7 +55,7 @@ class _WaitAnalysisState extends State<WaitAnalysis> {
                     Expanded(
                       child: 
                         Text(
-                          "Seu vídeo será sendo processado e você será notificado(a) quando a análise estiver pronta.",
+                          "Seu vídeo será processado e você será notificado(a) quando a análise estiver pronta.",
                           style: TextStyle(fontSize: 22, color: MyColors.grey, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,                     
                         ),
