@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:video_player/video_player.dart';
 import '../../../../src/assets/colors/MyColors.dart';
-import '../api/UserApi.dart';
+import '../../videos/api/VideoApi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -118,7 +118,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _loadVideoList() async {
     var userId = "1";
-    var responseGet = await new UserApi().getVideos(userId);
+    var responseGet = await new VideoApi().getVideos(userId);
     var response = jsonDecode(responseGet.toString());
 
     print(response);
