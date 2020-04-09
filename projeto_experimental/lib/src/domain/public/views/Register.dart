@@ -19,7 +19,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   TextEditingController controllerName = new TextEditingController();
   TextEditingController controllerEmail = new TextEditingController();
-  TextEditingController controllerPass = new TextEditingController();
+  TextEditingController controllerPassword = new TextEditingController();
   TextEditingController controllerBirthday = new TextEditingController();
   TextEditingController controllerPhone = new TextEditingController();
   TextEditingController controllerCountry = new TextEditingController();
@@ -28,18 +28,12 @@ class _RegisterState extends State<Register> {
   String message = '';
   bool _obscureText = true;
 
-  _addId(dynamic userId, dynamic userEmail) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('userId', userId);
-    prefs.setString('userEmail', userEmail);
-  }
-
-  void _showDialog() {
+  void _showDialog(var tipo) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: new Text("Erro!"),
+          title: new Text(tipo),
           content: new Text(message),
           actions: <Widget>[
             new FlatButton(
@@ -61,20 +55,21 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Future<dynamic> _login() async {
+  Future<dynamic> _registerUser() async {
     try {
       var responseLogin =
-          await new PublicApi().login(controllerEmail, controllerPass);
+          await new PublicApi().register(controllerName, controllerEmail, controllerPassword, controllerBirthday, controllerPhone, controllerCountry, controllerIdentity);
       var response = jsonDecode(responseLogin.toString());
 
       if (response['status'] != 200) {
         setState(() {
           message = response['error'];
-          _showDialog();
+          _showDialog("Erro!");
         });
-      } else {       
-        _addId(response['user_data']['id'], response['user_data']['email']);
-        Navigator.pushReplacementNamed(context, '/Home');
+      } else {               
+          message = "Cadastro efetuado com sucesso! Por favor, faça o login agora.";
+          _showDialog("Sucesso!");
+          Navigator.pushReplacementNamed(context, '/LoginPage');
       }
       return response;
     } catch (e) {
@@ -124,6 +119,23 @@ class _RegisterState extends State<Register> {
                       color: MyColors.white,
                       ),
                   child: TextFormField(
+                    controller: controllerName,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,                        
+                        hintText: 'Nome'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 25.0),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  padding:
+                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: MyColors.white,
+                      ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: controllerEmail,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
@@ -140,7 +152,7 @@ class _RegisterState extends State<Register> {
                       color: MyColors.white,
                       ),
                   child: TextField(
-                    controller: controllerPass,
+                    controller: controllerPassword,
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       border: InputBorder.none,                      
@@ -160,21 +172,72 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                 ),
+                /* DATA DE ANIVERSÁRIO AQUI */
 
+                Container(
+                  margin: EdgeInsets.only(top: 25.0),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  padding:
+                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: MyColors.white,
+                      ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.phone,
+                    controller: controllerPhone,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,                        
+                        hintText: 'Telefone'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 25.0),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  padding:
+                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: MyColors.white,
+                      ),
+                  child: TextFormField(
+                    controller: controllerCountry,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,                        
+                        hintText: 'País'),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 25.0),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  padding:
+                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: MyColors.white,
+                      ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: controllerCountry,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,                        
+                        hintText: 'Identificador (CPF, RG, etc...)'),
+                  ),
+                ),
                 Container(
                   width: MediaQuery.of(context).size.width / 1.1,
                   height: 60,
                   margin: const EdgeInsets.only(top: 25.0),
                   child: FlatButton(                    
                     child: Text(
-                      'LOGIN',
+                      'CADASTRAR',
                       style: TextStyle(color: MyColors.primaryColor, fontSize: 20.0),
                     ),
                     color: MyColors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     onPressed: () {
-                      _login();
+                      _registerUser();
                     },
                   ),
                 ),
