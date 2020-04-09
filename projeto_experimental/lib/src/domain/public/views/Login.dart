@@ -119,6 +119,7 @@ class _LoginState extends State<Login> {
                       color: MyColors.white,
                       ),
                   child: TextFormField(
+                    keyboardType: TextInputType.emailAddress,
                     controller: controllerEmail,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
