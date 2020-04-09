@@ -176,23 +176,26 @@ class _LoginState extends State<Login> {
                 ),
                 // ),
                 Padding(padding: EdgeInsets.only(top: 60)),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     Text(
-                //       "Ao prosseguir com o Login, você concorda com os nossos  ",
-                //       style: TextStyle(fontSize: 8, color: Colors.white),
-                //     ),
-                //     InkWell(
-                //         child: Text("Termos de Uso",
-                //             style: TextStyle(
-                //                 fontSize: 8,
-                //                 decoration: TextDecoration.underline,
-                //                 color: Colors.white)),
-                //         onTap: () => launch(
-                //             "${DotEnv().env['URL_VEMRODAR']}/app/google_terms.php"))
-                //   ],
-                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Não possui um login? Então registre-se ",
+                      style: TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+                    InkWell(
+                        child: Text("aqui!",
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration.underline,
+                                color: Colors.white)),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/Register');
+                        }
+                    )
+                  ],
+                ),
               ],
               //),
             ),
