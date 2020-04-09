@@ -180,11 +180,11 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Não possui um login? Então registre-se ",
+                      "Não possui um login?\n Então registre-se",
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                     InkWell(
-                        child: Text("aqui!",
+                        child: Text("\naqui!",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

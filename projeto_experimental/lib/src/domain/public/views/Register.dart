@@ -10,6 +10,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -25,6 +28,8 @@ class _RegisterState extends State<Register> {
   TextEditingController controllerCountry = new TextEditingController();
   TextEditingController controllerIdentity = new TextEditingController();
 
+  DateFormat formatBirthday;
+
   String message = '';
   bool _obscureText = true;
 
@@ -39,7 +44,7 @@ class _RegisterState extends State<Register> {
             new FlatButton(
               child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
               onPressed: () {
-                Navigator.of(context).pop();
+                tipo == "Sucesso!" ? Navigator.pushReplacementNamed(context, '/LoginPage') : Navigator.of(context).pop();
               },
             ),
           ],
@@ -68,8 +73,7 @@ class _RegisterState extends State<Register> {
         });
       } else {               
           message = "Cadastro efetuado com sucesso! Por favor, faça o login agora.";
-          _showDialog("Sucesso!");
-          Navigator.pushReplacementNamed(context, '/LoginPage');
+          _showDialog("Sucesso!");          
       }
       return response;
     } catch (e) {
@@ -84,6 +88,7 @@ class _RegisterState extends State<Register> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+    formatBirthday = new DateFormat.yMd('pt');
   }
 
   @override
@@ -182,8 +187,34 @@ class _RegisterState extends State<Register> {
                     ),
                   ),
                 ),
-                /* DATA DE ANIVERSÁRIO AQUI */
-
+                Container( 
+                  margin: EdgeInsets.only(top: 25.0),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  padding:
+                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      color: MyColors.white,
+                      ),                         
+                  child: DateTimeField(
+                    controller: controllerBirthday,
+                    style: new TextStyle(
+                      //color: Colors.red,
+                      fontSize: 15.0,
+                    ),
+                    format: formatBirthday,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      labelText: 'Data de Nascimento'),
+                    onShowPicker: (context, _dateTime) {
+                      return showDatePicker(
+                          context: context,
+                          firstDate: DateTime(1900),
+                          initialDate: _dateTime ?? DateTime.now(),
+                          lastDate: DateTime(2100));
+                      }   
+                  ),
+                ),
                 Container(
                   margin: EdgeInsets.only(top: 25.0),
                   width: MediaQuery.of(context).size.width / 1.1,

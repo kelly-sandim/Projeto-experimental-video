@@ -15,7 +15,7 @@ class PublicApi extends HttpConfig {
       "nome": controllerName.text,
       "email": controllerEmail.text,
       "senha": controllerPassword.text,
-      "data_aniversario": controllerBirthday.text,
+      "data_nascimento": controllerBirthday.text,
       "telefone": controllerPhone.text,
       "pais": controllerCountry.text,
       "identidade": controllerIdentity.text
