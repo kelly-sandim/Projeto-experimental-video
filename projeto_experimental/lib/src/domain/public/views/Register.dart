@@ -96,7 +96,8 @@ class _RegisterState extends State<Register> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
-        child: Center(
+        child: SafeArea(child: 
+        Center(
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
@@ -108,6 +109,15 @@ class _RegisterState extends State<Register> {
                   width: 150.0,
                   height: 150.0,
                   decoration: BoxDecoration(shape: BoxShape.circle),
+                ),
+                Text( 
+                  "\nApenas algumas informações e você estará pronto(a) para postar seus vídeos!\n",            
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: MyColors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25
+                  ),              
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 25.0),
@@ -122,7 +132,7 @@ class _RegisterState extends State<Register> {
                     controller: controllerName,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
-                        hintText: 'Nome'),
+                        labelText: 'Nome'),
                   ),
                 ),
                 Container(
@@ -139,7 +149,7 @@ class _RegisterState extends State<Register> {
                     controller: controllerEmail,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
-                        hintText: 'E-mail'),
+                        labelText: 'E-mail'),
                   ),
                 ),
                 Container(
@@ -156,7 +166,7 @@ class _RegisterState extends State<Register> {
                     obscureText: _obscureText,
                     decoration: InputDecoration(
                       border: InputBorder.none,                      
-                      hintText: 'Senha',
+                      labelText: 'Senha',
                       suffixIcon: IconButton(
                           icon: Icon(
                             _obscureText
@@ -188,7 +198,7 @@ class _RegisterState extends State<Register> {
                     controller: controllerPhone,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
-                        hintText: 'Telefone'),
+                        labelText: 'Telefone'),
                   ),
                 ),
                 Container(
@@ -204,7 +214,7 @@ class _RegisterState extends State<Register> {
                     controller: controllerCountry,
                     decoration: InputDecoration(
                         border: InputBorder.none,                        
-                        hintText: 'País'),
+                        labelText: 'País'),
                   ),
                 ),
                 Container(
@@ -218,10 +228,11 @@ class _RegisterState extends State<Register> {
                       ),
                   child: TextFormField(
                     keyboardType: TextInputType.number,
-                    controller: controllerCountry,
+                    controller: controllerIdentity,
                     decoration: InputDecoration(
-                        border: InputBorder.none,                        
-                        hintText: 'Identificador (CPF, RG, etc...)'),
+                        border: InputBorder.none, 
+                        labelText: 'Identificador',                       
+                        hintText: 'CPF, RG, etc...'),
                   ),
                 ),
                 Container(
@@ -242,30 +253,13 @@ class _RegisterState extends State<Register> {
                   ),
                 ),
                 // ),
-                Padding(padding: EdgeInsets.only(top: 60)),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   children: <Widget>[
-                //     Text(
-                //       "Ao prosseguir com o Login, você concorda com os nossos  ",
-                //       style: TextStyle(fontSize: 8, color: Colors.white),
-                //     ),
-                //     InkWell(
-                //         child: Text("Termos de Uso",
-                //             style: TextStyle(
-                //                 fontSize: 8,
-                //                 decoration: TextDecoration.underline,
-                //                 color: Colors.white)),
-                //         onTap: () => launch(
-                //             "${DotEnv().env['URL_VEMRODAR']}/app/google_terms.php"))
-                //   ],
-                // ),
+                Padding(padding: EdgeInsets.only(top: 60)),                
               ],
               //),
             ),
           ),
         ),
       ),
-    );
+    ));
   }
 }
