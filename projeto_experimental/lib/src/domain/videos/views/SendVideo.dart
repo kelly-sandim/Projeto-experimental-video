@@ -12,6 +12,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get_ip/get_ip.dart';
 
 class SendVideo extends StatefulWidget {
   @override
@@ -88,7 +90,12 @@ class _SendVideoState extends State<SendVideo> {
       });
     }
 
-    var responseUpload = await new VideoApi().uploadVideo(userId, controllerTitle.text, base64Video);
+    var currentLocation = await Geolocator().getCurrentPosition();
+    var lat = currentLocation.latitude;
+    var lng = currentLocation.longitude;
+    var ip = await GetIp.ipAddress;
+
+    var responseUpload = await new VideoApi().uploadVideo(userId, controllerTitle.text, base64Video, lat, lng, ip);
     var response = jsonDecode(responseUpload.toString());
     if (response['status'] != 200) {
       setState(() {

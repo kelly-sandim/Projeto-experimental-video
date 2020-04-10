@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                 ),
                 // ),
                 Padding(padding: EdgeInsets.only(top: 60)),
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
@@ -184,7 +184,7 @@ class _LoginState extends State<Login> {
                       style: TextStyle(fontSize: 20, color: Colors.white),
                     ),
                     InkWell(
-                        child: Text("\naqui!",
+                        child: Text("aqui!",
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
