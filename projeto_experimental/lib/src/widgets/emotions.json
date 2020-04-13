@@ -1,0 +1,23 @@
+{
+    "emotion_voice":{
+       "felicidade":0.10,
+       "tristeza":0.50,
+       "surpresa":0.05,
+       "medo":0.10,
+       "neutralidade":0.25
+    },
+    "emotion_faces":{
+       "felicidade":0.10,
+       "tristeza":0.50,
+       "surpresa":0.05,
+       "medo":0.10,
+       "neutralidade":0.25
+    },
+    "emotion_text":{
+       "felicidade":0.10,
+       "tristeza":0.50,
+       "surpresa":0.05,
+       "medo":0.10,
+       "neutralidade":0.25
+    }
+ }
