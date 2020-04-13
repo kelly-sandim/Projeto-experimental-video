@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../../../../src/assets/colors/MyColors.dart';
-//import 'package:app_vem_rodar_motorista/src/domain/public/api/PublicApi.dart';
+import '../api/VideoApi.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -24,36 +24,52 @@ class Result extends StatefulWidget {
 
 class _ResultState extends State<Result> {  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  var dataChart;
 
-  List<Map<String, Object>> _data1 = [{ 'name': 'Please wait', 'value': 0 }];
+  List<Map<String, Object>> _data = [{ 'name': 'Please wait', 'value': 0 }];
 
-  getData1() async {
+  _createData() async {
     await Future.delayed(Duration(seconds: 4));
 
-    const dataObj = [{
-      'name': 'Jan',
-      'value': 8726.2453,
-    }, {
-      'name': 'Feb',
-      'value': 2445.2453,
-    }, {
-      'name': 'Mar',
-      'value': 6636.2400,
-    }, {
-      'name': 'Apr',
-      'value': 4774.2453,
-    }, {
-      'name': 'May',
-      'value': 1066.2453,
-    }, {
-      'name': 'Jun',
-      'value': 4576.9932,
-    }, {
-      'name': 'Jul',
-      'value': 8926.9823,
-    }];
+    var dataObj = dataChart;
+    // [{
+    //   'name': 'Jan',
+    //   'value': 8726.2453,
+    // }, {
+    //   'name': 'Feb',
+    //   'value': 2445.2453,
+    // }, {
+    //   'name': 'Mar',
+    //   'value': 6636.2400,
+    // }, {
+    //   'name': 'Apr',
+    //   'value': 4774.2453,
+    // }, {
+    //   'name': 'May',
+    //   'value': 1066.2453,
+    // }, {
+    //   'name': 'Jun',
+    //   'value': 4576.9932,
+    // }, {
+    //   'name': 'Jul',
+    //   'value': 8926.9823,
+    // }];
 
-    this.setState(() { this._data1 = dataObj;});
+    this.setState(() { this._data = dataObj;});
+  }
+
+  _getResult(_createData) async
+  {
+    var resultData = await new VideoApi().getJSONResult();
+    var data = jsonDecode(resultData.toString());
+    setState(() {
+      dataChart = [{ 'name':'Felicidade', 'value':data['felicidadeMedia'] }, 
+                   { 'name':'Tristeza', 'value':data['tristezaMedia'] }, 
+                   { 'name':'Surpresa', 'value':data['surpresaMedia'] }, 
+                   { 'name':'Medo', 'value':data['medoMedia'] }, 
+                   { 'name':'Neutralidade', 'value':data['neutralidadeMedia'] }];
+    });
+    _createData();
   }
 
   
@@ -65,7 +81,7 @@ class _ResultState extends State<Result> {
       DeviceOrientation.portraitDown,
     ]);
 
-    this.getData1();
+    _getResult(_createData);
   }
 
   @override
@@ -100,13 +116,12 @@ class _ResultState extends State<Result> {
                     option: '''
                       {
                         title: {
-                            text: '同名数量统计',
-                            subtext: '纯属虚构',
+                            text: 'Porcentagem das Emoções',                            
                             left: 'center'
                         },
                         dataset: {
                           dimensions: ['name', 'value'],
-                          source: ${jsonEncode(_data1)},
+                          source: ${jsonEncode(_data)},
                         },
                         color: ['#3398DB'],
                         legend: {
@@ -216,7 +231,7 @@ class _ResultState extends State<Result> {
                       Map<String, Object> messageAction = jsonDecode(message);
                       print(messageAction);
                       if (messageAction['type'] == 'select') {
-                        final item = _data1[messageAction['payload']];
+                        final item = _data[messageAction['payload']];
                         // _scaffoldKey.currentState.showSnackBar(                         
                         //   SnackBar(
                         Fluttertoast.showToast(
@@ -241,8 +256,7 @@ class _ResultState extends State<Result> {
                     option: '''
                       {
                         title: {
-                            text: '同名数量统计',
-                            subtext: '纯属虚构',
+                            text: 'Porcentagem das Emoções',                            
                             left: 'center'
                         },
                         tooltip: {
@@ -255,9 +269,9 @@ class _ResultState extends State<Result> {
                             right: 10,
                             top: 20,
                             bottom: 20,
-                            data: ${jsonEncode(_data1)},
+                            data: ${jsonEncode(_data)},
 
-                            selected: ${jsonEncode(_data1)}
+                            selected: ${jsonEncode(_data)}
                         },
                         series: [
                             {
@@ -265,7 +279,7 @@ class _ResultState extends State<Result> {
                                 type: 'pie',
                                 radius: '55%',
                                 center: ['40%', '50%'], 
-                                data:  ${jsonEncode(_data1)},                               
+                                data:  ${jsonEncode(_data)},                               
                                 emphasis: {
                                     itemStyle: {
                                         shadowBlur: 10,
