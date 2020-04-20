@@ -117,7 +117,14 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       backgroundColor: MyColors.white,
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.arrow_back, color: MyColors.grey, size: 25),
+              onPressed: () { Navigator.pushReplacementNamed(context, '/Home'); },              
+            );
+          },
+        ), 
         title: Text("Video Player", style: TextStyle(color: MyColors.grey)),        
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
@@ -127,7 +134,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },          
-          child: isLoading ? CircularProgressIndicator()
+          child: isLoading ? Center(
+            child: CircularProgressIndicator(
+              strokeWidth: 8,
+              valueColor:
+                  new AlwaysStoppedAnimation<Color>(MyColors.primaryColor)),
+          )
           : SingleChildScrollView(
             child: Column(
               children: <Widget>[
