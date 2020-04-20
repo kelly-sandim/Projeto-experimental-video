@@ -25,6 +25,8 @@ class Result extends StatefulWidget {
 class _ResultState extends State<Result> {  
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   var dataChart;
+  var videoId;
+  var messageError = "";
 
   List<Map<String, Object>> _data = [{ 'name': 'Please wait', 'value': 0 }];
 
@@ -58,18 +60,53 @@ class _ResultState extends State<Result> {
     this.setState(() { this._data = dataObj;});
   }
 
+  void _showDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Erro!"),
+          content: new Text(messageError),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   _getResult(_createData) async
   {
-    var resultData = await new VideoApi().getJSONResult();
-    var data = jsonDecode(resultData.toString());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      dataChart = [{ 'name':'Felicidade', 'value':data['felicidadeMedia'] }, 
-                   { 'name':'Tristeza', 'value':data['tristezaMedia'] }, 
-                   { 'name':'Surpresa', 'value':data['surpresaMedia'] }, 
-                   { 'name':'Medo', 'value':data['medoMedia'] }, 
-                   { 'name':'Neutralidade', 'value':data['neutralidadeMedia'] }];
+      videoId = prefs.getString('videoId');
     });
-    _createData();
+
+    var resultData = await new VideoApi().getJSONResult(videoId);
+    var data = jsonDecode(resultData.toString());
+    if(data['status'] != 200)
+    {
+      setState(() {
+        messageError = data['error'];
+        _showDialog();
+      });
+    }
+    else
+    {
+      setState(() {
+        dataChart = [{ 'name':'Felicidade', 'value':data['felicidadeMedia'] }, 
+                    { 'name':'Tristeza', 'value':data['tristezaMedia'] }, 
+                    { 'name':'Surpresa', 'value':data['surpresaMedia'] }, 
+                    { 'name':'Medo', 'value':data['medoMedia'] }, 
+                    { 'name':'Neutralidade', 'value':data['neutralidadeMedia'] }];
+      });
+      _createData();
+    }
   }
 
   
