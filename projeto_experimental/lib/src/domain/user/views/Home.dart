@@ -63,10 +63,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 children: <Widget>[
                                   new ListTile(
                                     leading: Icon(Icons.play_circle_filled,
-                                        color: MyColors.grey, size: 30),
+                                        color: MyColors.primaryColor, size: 50),
                                     title: Text("$videoName\n", style: TextStyle(
                                                   fontSize: 20, 
-                                                  color: MyColors.grey,
+                                                  color: MyColors.primaryColor,
                                                   fontWeight: FontWeight.bold, 
                                                 ),),
                                     subtitle: RichText(
@@ -91,10 +91,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                         ),
                                       ), 
                                     onTap: () {
-                                      _setDataToResultPage(videoId, _callResultPage);
+                                      
                                     },
                                   ),
-                                  
+                                  ButtonTheme(                                    
+                                    child: ButtonBar(
+                                      alignment: MainAxisAlignment.start,
+                                      children: <Widget>[
+                                        FlatButton(
+                                          child: const Text('VER RESULTADO DA ANÁLISE',
+                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15.0),
+                                          ),
+                                          onPressed: () {
+                                            _setDataToResultPage(videoId, _callResultPage);
+                                          },
+                                        ),
+                                        FlatButton(
+                                          child: const Text('ASSISTIR VÍDEO',
+                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15.0),
+                                          ),
+                                          onPressed: () {
+                                            _setDataToVideoPlayerPage(videoId, _callVideoPlayerPage);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ), 
                                 ],
                               )
                             ],
@@ -144,6 +166,19 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _callResultPage()
   {
     Navigator.pushNamed(context, '/Result');
+  }
+
+  _setDataToVideoPlayerPage(var videoId, _callVideoPlayerPage) async
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('videoId', videoId);
+
+    _callVideoPlayerPage();
+  }
+
+  _callVideoPlayerPage()
+  {
+    //Navigator.pushNamed(context, '/Result');
   }
 
   _loadData(_loadVideoList) async
