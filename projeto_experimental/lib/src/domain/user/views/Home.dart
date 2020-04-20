@@ -178,7 +178,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _callVideoPlayerPage()
   {
-    //Navigator.pushNamed(context, '/Result');
+    Navigator.pushNamed(context, '/VideoPlayer');
   }
 
   _loadData(_loadVideoList) async
