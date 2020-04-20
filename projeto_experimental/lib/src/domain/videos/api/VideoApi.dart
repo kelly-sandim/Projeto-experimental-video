@@ -23,6 +23,12 @@ class VideoApi extends HttpConfig {
       "token": "token"      
     });
 
+  getAllVideoData(userId) =>
+    this.http.post("/testes/smartemotion/app/api/videos/getAllVideoData.php", data: {
+      "token": "token",
+      "id_usuario": userId.toString() 
+  });
+
 
   fetchLocation(userId, lat, lng) => 
     this.http.post("/testes/smartemotion/app/api/users/fetchLocation.php", data: { 
