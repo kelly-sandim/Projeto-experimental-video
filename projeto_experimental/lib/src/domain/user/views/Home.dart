@@ -54,9 +54,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                         var videoId = jsonData[index]['Id do Video'];
                         var videoName = jsonData[index]['Nome do Video'];
                         var videoDate = jsonData[index]['Data do Video'];
-                        var mediaVoice = jsonData[index]['Media Voz'];
-                        var mediaImage = jsonData[index]['Media Imagem'];
-                        var mediaText = jsonData[index]['Media Texto'];
+                        var mediaGeral = jsonData[index]['Media Geral'];
                         
                         return Card(
                           child: Column(
@@ -64,45 +62,32 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                               Column(
                                 children: <Widget>[
                                   new ListTile(
-                                    leading: Icon(Icons.play_circle_filled,
-                                        color: MyColors.primaryColor, size: 50),
-                                    title: Text("$videoName\n", style: TextStyle(
+                                    leading: mediaGeral,
+                                    title: Text("$videoDate\n", style: TextStyle(
                                                   fontSize: 20, 
+                                                  color: MyColors.grey,
+                                                  fontWeight: FontWeight.bold, 
+                                                ),),
+                                    subtitle: Text(videoName, style: TextStyle(
+                                                  fontSize: 15, 
                                                   color: MyColors.primaryColor,
                                                   fontWeight: FontWeight.bold, 
                                                 ),),
-                                    subtitle: RichText(
-                                        text: TextSpan(
-                                          text: "Postado em: $videoDate\n\n",
-                                          style: TextStyle(
-                                                    fontSize: 20, 
-                                                    color: MyColors.grey,
-                                                    fontWeight: FontWeight.bold, 
-                                                  ),
-                                          children: [
-                                            TextSpan(text: "Média das Vozes: ", style: TextStyle(fontSize: 15, color: MyColors.grey, fontWeight: FontWeight.bold)),
-                                            WidgetSpan(child: mediaVoice),
-                                            TextSpan(text: "\n"),
-                                            TextSpan(text: "Média das Imagens: ", style: TextStyle(fontSize: 15, color: MyColors.grey, fontWeight: FontWeight.bold)),
-                                            WidgetSpan(child: mediaImage),
-                                            TextSpan(text: "\n"),
-                                            TextSpan(text: "Média dos Textos: ", style: TextStyle(fontSize: 15, color: MyColors.grey, fontWeight: FontWeight.bold)),
-                                            WidgetSpan(child: mediaText),                                            
-                                            TextSpan(text: "\n"),
-                                          ],
-                                        ),
-                                      ), 
                                     onTap: () {
                                       
                                     },
                                   ),
+                                  ],
+                                ),
+                                Row(children: <Widget>[
                                   ButtonTheme(                                    
                                     child: ButtonBar(
+                                      layoutBehavior: ButtonBarLayoutBehavior.constrained,
                                       alignment: MainAxisAlignment.start,
                                       children: <Widget>[
                                         FlatButton(
-                                          child: const Text('VER RESULTADO DA ANÁLISE',
-                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15.0),
+                                          child: const Text('RESULTADO DA ANÁLISE',
+                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15),
                                           ),
                                           onPressed: () {
                                             _setDataToResultPage(videoId, _callResultPage);
@@ -110,7 +95,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                         ),
                                         FlatButton(
                                           child: const Text('ASSISTIR VÍDEO',
-                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15.0),
+                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15),
                                           ),
                                           onPressed: () {
                                             _setDataToVideoPlayerPage(videoId, _callVideoPlayerPage);
@@ -120,7 +105,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                     ),
                                   ), 
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         );
@@ -134,21 +119,17 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: ListView(
             children: <Widget>[
               new UserAccountsDrawerHeader(
-                accountName: new Text("Olá, $userName!", style: TextStyle(fontSize: 20, color: MyColors.white)),
-                accountEmail: new Text(userEmail, style: TextStyle(fontSize: 15, color: MyColors.white),),
+                accountName: new Text("Olá, $userName!", style: TextStyle(fontSize: 21, color: MyColors.grey)),
+                accountEmail: new Text(userEmail, style: TextStyle(fontSize: 16, color: MyColors.grey),),
               
                 currentAccountPicture: new GestureDetector(
                   child: new CircleAvatar(
-                    backgroundColor: Colors.white,
-                      child: Image(
-                        width: 135,
-                        height: 135,
-                        image: AssetImage('assets/images/icon.png'),
-                      ),
+                    backgroundColor: MyColors.primaryColor,
+                      child: Icon(Icons.person, size: 70, color: MyColors.white),
                   ),
                 ),
                 decoration: new BoxDecoration(
-                  color: MyColors.primaryColor,
+                  color: MyColors.white,
                 ),
               ),
               new ListTile(
@@ -214,9 +195,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
 
   _loadVideoList(var userId) async {    
     var responseGet = await new VideoApi().getAllVideoData(userId);
-    var response = jsonDecode(responseGet.toString());
-
-    print(response);
+    var response = jsonDecode(responseGet.toString());   
 
     if (response['status'] != 200) {
       setState(() {
@@ -224,9 +203,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         _showDialog();
       });
     } else {
-        var dataD;
-        var dataE; 
-        var dataF; 
+        var dataD;         
         var jsonEntry = new List();
 
         for (var item in response['data']) {
@@ -236,48 +213,20 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           var dataB = "${dateTime.day}/${dateTime.month}/${dateTime.year} - ${dateTime.hour}:${dateTime.minute}";        
           var dataC = item['nome'];
           var mediaVoice = item['medias_voice'];
-          if((mediaVoice) < 0.33)
-          {
-            dataD = Image.asset('./lib/src/assets/images/frowning-face.png', width: 35, height: 35);
-          }
-          else if((mediaVoice) >= 0.33 && (mediaVoice) < 0.6)
-          {
-            dataD = Image.asset('./lib/src/assets/images/neutral-face.png', width: 35, height: 35);
-          }
-          else
-          {
-            dataD = Image.asset('./lib/src/assets/images/smiling-face.png', width: 35, height: 35);
-          }
-
           var mediaImage = item['medias_image'];        
-          if((mediaImage) < 0.33)
-          {
-            dataE = Image.asset('./lib/src/assets/images/frowning-face.png', width: 35, height: 35);
+          var mediaText = item['medias_text'];
+          var mediaGeral = (mediaVoice + mediaImage + mediaText)/3;
+          if((mediaGeral) < 0.33){
+            dataD = Image.asset('./lib/src/assets/images/frowning-face.png', width: 50, height: 50);
           }
-          else if((mediaImage) >= 0.33 && (mediaImage) < 0.6)
-          {
-            dataE = Image.asset('./lib/src/assets/images/neutral-face.png', width: 35, height: 35);
-          }
-          else
-          {
-            dataE = Image.asset('./lib/src/assets/images/smiling-face.png', width: 35, height: 35);
-          }
-
-          var mediaText = item['medias_text'];        
-          if((mediaText) < 0.33)
-          {
-            dataF = Image.asset('./lib/src/assets/images/frowning-face.png', width: 35, height: 35);
-          }
-          else if((mediaText) >= 0.33 && (mediaText) < 0.6)
-          {
-            dataF = Image.asset('./lib/src/assets/images/neutral-face.png', width: 35, height: 35);
+          else if((mediaGeral) >= 0.33 && (mediaGeral) < 0.6){
+            dataD = Image.asset('./lib/src/assets/images/neutral-face.png', width: 50, height: 50);
           }
           else
           {
-            dataF = Image.asset('./lib/src/assets/images/smiling-face.png', width: 35, height: 35);
+            dataD = Image.asset('./lib/src/assets/images/smiling-face.png', width: 50, height: 50);
           }
-
-          videoData.addAll({'Id do Video':dataA, 'Data do Video':dataB, 'Nome do Video':dataC, 'Media Voz':dataD, 'Media Imagem':dataE, 'Media Texto':dataF});
+          videoData.addAll({'Id do Video':dataA, 'Data do Video':dataB, 'Nome do Video':dataC, 'Media Geral':dataD});
           jsonEntry.add(videoData);
         }//fim for
 
