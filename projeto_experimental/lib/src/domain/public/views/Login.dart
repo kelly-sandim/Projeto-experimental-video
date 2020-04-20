@@ -23,10 +23,11 @@ class _LoginState extends State<Login> {
   String message = '';
   bool _obscureText = true;
 
-  _addId(dynamic userId, dynamic userEmail) async {
+  _addId(dynamic userId, dynamic userEmail, dynamic userName) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('userId', userId);
     prefs.setString('userEmail', userEmail);
+    prefs.setString('userName', userName);
   }
 
   void _showDialog() {
@@ -68,7 +69,7 @@ class _LoginState extends State<Login> {
           _showDialog();
         });
       } else {       
-        _addId(response['user_data']['id'], response['user_data']['email']);
+        _addId(response['user_data']['id'], response['user_data']['email'], response['user_data']['nome']);
         Navigator.pushReplacementNamed(context, '/Home');
       }
       return response;

@@ -29,6 +29,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   String messageError;
   bool isLoading = true;
   var userId;
+  var userName;
+  var userEmail;
 
   List<Widget> tabList(BuildContext context) {
     List<Widget> _tabList = [
@@ -131,6 +133,24 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           color: MyColors.white,
           child: ListView(
             children: <Widget>[
+              new UserAccountsDrawerHeader(
+                accountName: new Text("Olá, $userName!", style: TextStyle(fontSize: 20, color: MyColors.white)),
+                accountEmail: new Text(userEmail, style: TextStyle(fontSize: 15, color: MyColors.white),),
+              
+                currentAccountPicture: new GestureDetector(
+                  child: new CircleAvatar(
+                    backgroundColor: Colors.white,
+                      child: Image(
+                        width: 135,
+                        height: 135,
+                        image: AssetImage('assets/images/icon.png'),
+                      ),
+                  ),
+                ),
+                decoration: new BoxDecoration(
+                  color: MyColors.primaryColor,
+                ),
+              ),
               new ListTile(
                 title: new Text(
                   "Logout",
@@ -184,8 +204,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _loadData(_loadVideoList) async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
+    setState(() {      
       userId = prefs.getString('userId');
+      userName = prefs.getString('userName');
+      userEmail = prefs.getString('userEmail');
     });
     _loadVideoList(userId);  
   }
