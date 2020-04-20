@@ -13,9 +13,10 @@ class VideoApi extends HttpConfig {
       "lng": lng.toString(),
       "ip_video": ip.toString()
     });
-  getVideos(userId) =>
-    this.http.post("/testes/smartemotion/app/api/videos/getVideos.php", data: {
+  getVideo(videoId, userId) =>
+    this.http.post("/testes/smartemotion/app/api/videos/getVideo.php", data: {
       "token": "token",
+      "id_video": videoId.toString(),
       "id_usuario": userId.toString()      
     });
   getJSONResult(videoId) =>

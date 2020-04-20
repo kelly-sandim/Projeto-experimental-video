@@ -21,104 +21,55 @@ class VideoPlayerPage extends StatefulWidget {
 }
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {  
-  TextEditingController controllerTitle = new TextEditingController();
-  TextEditingController controllerDescription = new TextEditingController();
+  String videoTitle;
   VideoPlayerController controllerVideo;
-  File videoFile;
-  String videoPath;
   String userId;
-  String base64Video = "";
-  String messageError;
+  String videoId;  
+  String messageError;  
+  bool isLoading = true;
 
   _getData(_initVideo) async 
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       userId = prefs.getString('userId');
-      controllerTitle.text = prefs.getString('videoName');
-      videoPath = prefs.getString('videoPath'); 
-      videoFile = new File(videoPath);    
+      videoId = prefs.getString('videoId');      
     });
 
     _initVideo();
   }
 
-  _initVideo()
+  _initVideo() async
   {
-    controllerVideo = VideoPlayerController.network(videoPath);
-
-    controllerVideo.addListener(() {
-      setState(() {});
-    });    
-    controllerVideo.setLooping(false);
-    controllerVideo.initialize().then((_) => setState(() {}));    
-  }
-
-  _uploadVideo(_callWaitAnalysis) async
-  {  
-    var isLoading = true;
-
-    isLoading ? showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            width: MediaQuery.of(context).size.width /2.5,
-            height:  70,
-            child:
-            new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                new Padding(padding: EdgeInsets.only(right: 10.0)),
-                new CircularProgressIndicator(),
-                new Padding(padding: EdgeInsets.only(right: 26.0)),
-                new Text("Enviando o vídeo,\n por favor, aguarde..."),
-              ],
-            ),
-          ),
-        );
-      },
-    ) : Offstage();
-    
-    if (videoFile != null)
+    var responseVideo = await new VideoApi().getVideo(videoId, userId);
+    var response = jsonDecode(responseVideo.toString());
+    print(response);
+    if(response['status'] != 200)
     {
-      setState(() {        
-        base64Video = base64Encode(videoFile.readAsBytesSync());
-        print(base64Video);
-      });
-    }
-
-    var currentLocation = await Geolocator().getCurrentPosition();
-    var lat = currentLocation.latitude;
-    var lng = currentLocation.longitude;
-    var ip = await GetIp.ipAddress;
-
-    var responseUpload = await new VideoApi().uploadVideo(userId, controllerTitle.text, base64Video, lat, lng, ip);
-    var response = jsonDecode(responseUpload.toString());
-    if (response['status'] != 200) {
-      setState(() {
-        isLoading = false;
-      });
-
       setState(() {
         messageError = response['error'];
         _showDialog();
       });
-    } else {
+    }
+    else
+    {      
+      controllerVideo = VideoPlayerController.network(response['video_url']);
+
+      controllerVideo.addListener(() {
+        setState(() {});
+      });    
+      controllerVideo.setLooping(false);
+      controllerVideo.initialize().then((_) => setState(() {}));
+
       setState(() {
-        isLoading = false;
-      });
-
-      _callWaitAnalysis();
-    }    
+        videoTitle = response['titulo_video'];
+      });   
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
-
-  _callWaitAnalysis()
-  {
-    Navigator.pushReplacementNamed(context, '/WaitAnalysis');
-  }
+  
 
   void _showDialog() {
     showDialog(
@@ -167,13 +118,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text("Adicionar detalhes", style: TextStyle(color: MyColors.grey)),
-        actions: <Widget>[
-          IconButton(icon: Icon(Icons.send, size: 40, color: MyColors.grey), 
-            onPressed: () {
-              _uploadVideo(_callWaitAnalysis);
-            }),          
-        ],
+        title: Text("Video Player", style: TextStyle(color: MyColors.grey)),        
         backgroundColor: MyColors.white,
         elevation: 0.0, //para tirar a sombra
       ),
@@ -182,7 +127,8 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
         },          
-          child: SingleChildScrollView(
+          child: isLoading ? CircularProgressIndicator()
+          : SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Container(
@@ -208,43 +154,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                       borderRadius: BorderRadius.all(Radius.circular(10)),
                       color: MyColors.white,
                       ),
-                  child: TextFormField(
-                    enabled: false,
-                    controller: controllerTitle,
-                    decoration: InputDecoration(                        
-                        hintText: 'Título',
-                        border: new UnderlineInputBorder(
-                          borderSide: new BorderSide(
-                            color: MyColors.grey 
-                          ),
-                        ), 
-                    ),
+                  child: Text(
+                    videoTitle,
+                    style: TextStyle(color: MyColors.grey, fontWeight: FontWeight.bold, fontSize: 25),
                   ),
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width / 1,
-                  margin: EdgeInsets.only(top: 20),
-                  padding:
-                      EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      color: MyColors.white,
-                      ),
-                  child: TextField(
-                    controller: controllerDescription, 
-                    keyboardType: TextInputType.multiline,
-                    maxLines: null,                   
-                    decoration: InputDecoration(                        
-                        hintText: 'Descrição',
-                        border: new UnderlineInputBorder(
-                          borderSide: new BorderSide(
-                            color: MyColors.grey 
-                          ),
-                        ),                   
-                      ),
-                    ),
-                  ),
-                
+                ),                
               ],
             ),
           ),      

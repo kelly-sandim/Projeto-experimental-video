@@ -1,294 +1,294 @@
-import 'dart:ui';
-import 'dart:io' as Io;
-import 'dart:async';
-import 'dart:convert';
+// import 'dart:ui';
+// import 'dart:io' as Io;
+// import 'dart:async';
+// import 'dart:convert';
 
-import 'package:video_player/video_player.dart';
-import '../../../../src/assets/colors/MyColors.dart';
-import '../../videos/api/VideoApi.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+// import 'package:video_player/video_player.dart';
+// import '../../../../src/assets/colors/MyColors.dart';
+// import '../../videos/api/VideoApi.dart';
+// import 'package:flutter/material.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:url_launcher/url_launcher.dart';
+// import 'package:flutter/services.dart';
+// import 'package:fluttertoast/fluttertoast.dart';
 
-class Home extends StatefulWidget {
-  @override
-  _HomeState createState() => _HomeState();
-}
+// class Home extends StatefulWidget {
+//   @override
+//   _HomeState createState() => _HomeState();
+// }
 
-class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  int currentIndex = 0;
-  TabController tabController;
-  List<VideoPlayerController> controllerVideoList =
-      new List<VideoPlayerController>();
-  List<String> titleVideoList = 
-      new List<String>();
-  String messageError;
-  bool isLoading = true;
-  var userId;
+// class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+//   int currentIndex = 0;
+//   TabController tabController;
+//   List<VideoPlayerController> controllerVideoList =
+//       new List<VideoPlayerController>();
+//   List<String> titleVideoList = 
+//       new List<String>();
+//   String messageError;
+//   bool isLoading = true;
+//   var userId;
 
-  List<Widget> tabList(BuildContext context) {
-    List<Widget> _tabList = [
-      isLoading
-        ? Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 8,
-              valueColor:
-                  new AlwaysStoppedAnimation<Color>(MyColors.primaryColor)),
-          )
-        : Container(
-            color: MyColors.white,
-            child: Column(
-              children: <Widget>[
-                Expanded(
-                  child: new ListView.builder(
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      itemCount: controllerVideoList == null
-                          ? 0
-                          : controllerVideoList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Card(
-                          child: Column(
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  new ListTile(
-                                    leading: Icon(Icons.play_circle_filled,
-                                        color: MyColors.grey, size: 30),
-                                    title: Text(titleVideoList[index],
-                                        style: TextStyle(
-                                            color: MyColors.grey,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 20)),
-                                    onTap: () {
-                                      Navigator.pushNamed(context, '/Result');
-                                    },
-                                  ),
-                                  AspectRatio(
-                                  aspectRatio: controllerVideoList[index].value.aspectRatio, 
-                                  child: Stack(
-                                      alignment: FractionalOffset
-                                              .bottomRight +
-                                          const FractionalOffset(-0.1, -0.1),
-                                      children: <Widget>[
-                                        VideoPlayer(
-                                            controllerVideoList[index]),
-                                        _PlayPauseOverlay(controller: controllerVideoList[index]),
-                                        VideoProgressIndicator(controllerVideoList[index], allowScrubbing: true),
-                                      ]
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      }),
-                ),
-              ],
-            ),
-          ),
-        Container(
-          color: MyColors.white,
-          child: ListView(
-            children: <Widget>[
-              new ListTile(
-                title: new Text(
-                  "Logout",
-                  style: TextStyle(
-                      color: MyColors.primaryColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold),
-                ),
-                leading: new Icon(Icons.power_settings_new,
-                    color: MyColors.primaryColor, size: 30),
-                onTap: () async {
-                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                  prefs.clear();
-                  Navigator.pushReplacementNamed(context, '/LoginPage');
-                },
-              ),
-              new Divider(),
-            ],
-          )),
-    ];
+//   List<Widget> tabList(BuildContext context) {
+//     List<Widget> _tabList = [
+//       isLoading
+//         ? Center(
+//             child: CircularProgressIndicator(
+//               strokeWidth: 8,
+//               valueColor:
+//                   new AlwaysStoppedAnimation<Color>(MyColors.primaryColor)),
+//           )
+//         : Container(
+//             color: MyColors.white,
+//             child: Column(
+//               children: <Widget>[
+//                 Expanded(
+//                   child: new ListView.builder(
+//                       shrinkWrap: true,
+//                       physics: BouncingScrollPhysics(),
+//                       itemCount: controllerVideoList == null
+//                           ? 0
+//                           : controllerVideoList.length,
+//                       itemBuilder: (BuildContext context, int index) {
+//                         return Card(
+//                           child: Column(
+//                             children: <Widget>[
+//                               Column(
+//                                 children: <Widget>[
+//                                   new ListTile(
+//                                     leading: Icon(Icons.play_circle_filled,
+//                                         color: MyColors.grey, size: 30),
+//                                     title: Text(titleVideoList[index],
+//                                         style: TextStyle(
+//                                             color: MyColors.grey,
+//                                             fontWeight: FontWeight.bold,
+//                                             fontSize: 20)),
+//                                     onTap: () {
+//                                       Navigator.pushNamed(context, '/Result');
+//                                     },
+//                                   ),
+//                                   AspectRatio(
+//                                   aspectRatio: controllerVideoList[index].value.aspectRatio, 
+//                                   child: Stack(
+//                                       alignment: FractionalOffset
+//                                               .bottomRight +
+//                                           const FractionalOffset(-0.1, -0.1),
+//                                       children: <Widget>[
+//                                         VideoPlayer(
+//                                             controllerVideoList[index]),
+//                                         _PlayPauseOverlay(controller: controllerVideoList[index]),
+//                                         VideoProgressIndicator(controllerVideoList[index], allowScrubbing: true),
+//                                       ]
+//                                     ),
+//                                   ),
+//                                 ],
+//                               )
+//                             ],
+//                           ),
+//                         );
+//                       }),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         Container(
+//           color: MyColors.white,
+//           child: ListView(
+//             children: <Widget>[
+//               new ListTile(
+//                 title: new Text(
+//                   "Logout",
+//                   style: TextStyle(
+//                       color: MyColors.primaryColor,
+//                       fontSize: 18,
+//                       fontWeight: FontWeight.bold),
+//                 ),
+//                 leading: new Icon(Icons.power_settings_new,
+//                     color: MyColors.primaryColor, size: 30),
+//                 onTap: () async {
+//                   SharedPreferences prefs = await SharedPreferences.getInstance();
+//                   prefs.clear();
+//                   Navigator.pushReplacementNamed(context, '/LoginPage');
+//                 },
+//               ),
+//               new Divider(),
+//             ],
+//           )),
+//     ];
 
-    return _tabList;
-  }
+//     return _tabList;
+//   }
 
-  _loadData(_loadVideoList) async
-  {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userId = prefs.getString('userId');
-    });
-    _loadVideoList(userId);  
-  }
+//   _loadData(_loadVideoList) async
+//   {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     setState(() {
+//       userId = prefs.getString('userId');
+//     });
+//     _loadVideoList(userId);  
+//   }
 
-  _loadVideoList(var userId) async {    
-    var responseGet = await new VideoApi().getVideos(userId);
-    var response = jsonDecode(responseGet.toString());
+//   _loadVideoList(var userId) async {    
+//     var responseGet = await new VideoApi().getVideos(userId);
+//     var response = jsonDecode(responseGet.toString());
 
-    print(response);
+//     print(response);
 
-    if (response['status'] != 200) {
-      setState(() {
-        messageError = response['error'];
-        _showDialog();
-      });
-    } else {
-      for (var item in response["videos"]) {
-        controllerVideoList.add(new VideoPlayerController.network(item));
-        var urlSplitted = item.split("/");
-        titleVideoList.add(urlSplitted[urlSplitted.length-1]);
-      }
+//     if (response['status'] != 200) {
+//       setState(() {
+//         messageError = response['error'];
+//         _showDialog();
+//       });
+//     } else {
+//       for (var item in response["videos"]) {
+//         controllerVideoList.add(new VideoPlayerController.network(item));
+//         var urlSplitted = item.split("/");
+//         titleVideoList.add(urlSplitted[urlSplitted.length-1]);
+//       }
 
-      for (var item in controllerVideoList) {
-        item.addListener(() {
-          setState(() {});
-        });
-        item.setLooping(false);
-        item.initialize().then((_) => setState(() {}));          
-      }
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
+//       for (var item in controllerVideoList) {
+//         item.addListener(() {
+//           setState(() {});
+//         });
+//         item.setLooping(false);
+//         item.initialize().then((_) => setState(() {}));          
+//       }
+//     }
+//     setState(() {
+//       isLoading = false;
+//     });
+//   }
 
-  void _showDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Erro!"),
-          content: new Text(messageError),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+//   void _showDialog() {
+//     showDialog(
+//       context: context,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: new Text("Erro!"),
+//           content: new Text(messageError),
+//           actions: <Widget>[
+//             new FlatButton(
+//               child: new Text("OK", style: TextStyle(color: MyColors.primaryColor)),
+//               onPressed: () {
+//                 Navigator.of(context).pop();
+//               },
+//             ),
+//           ],
+//         );
+//       },
+//     );
+//   }
 
-  @override
-  void initState() {
-    super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-    tabController = TabController(vsync: this, length: 2);
-    _loadData(_loadVideoList);
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     SystemChrome.setPreferredOrientations([
+//       DeviceOrientation.portraitUp,
+//       DeviceOrientation.portraitDown,
+//     ]);
+//     tabController = TabController(vsync: this, length: 2);
+//     _loadData(_loadVideoList);
+//   }
 
-  @override
-  void dispose() {
-    tabController.dispose();
-    for (var item in controllerVideoList) {
-      item.dispose();          
-    }
-    super.dispose();
-  }
+//   @override
+//   void dispose() {
+//     tabController.dispose();
+//     for (var item in controllerVideoList) {
+//       item.dispose();          
+//     }
+//     super.dispose();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: MyColors.white,
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        leading: Image.asset('./lib/src/assets/images/youtube.png',
-            fit: BoxFit.cover, height: 35),
-        title: Text("YouFace", style: TextStyle(color: MyColors.grey)),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.videocam, size: 40, color: MyColors.grey),
-              onPressed: () {
-                Navigator.pushNamed(context, '/RecordVideo');
-              }),
-        ],
-        backgroundColor: MyColors.white,
-        elevation: 0.0, //para tirar a sombra
-      ),
-      body: TabBarView(
-        controller: tabController,
-        children: tabList(context),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: MyColors.white,
+//       resizeToAvoidBottomInset: true,
+//       appBar: AppBar(
+//         leading: Image.asset('./lib/src/assets/images/youtube.png',
+//             fit: BoxFit.cover, height: 35),
+//         title: Text("YouFace", style: TextStyle(color: MyColors.grey)),
+//         actions: <Widget>[
+//           IconButton(
+//               icon: Icon(Icons.videocam, size: 40, color: MyColors.grey),
+//               onPressed: () {
+//                 Navigator.pushNamed(context, '/RecordVideo');
+//               }),
+//         ],
+//         backgroundColor: MyColors.white,
+//         elevation: 0.0, //para tirar a sombra
+//       ),
+//       body: TabBarView(
+//         controller: tabController,
+//         children: tabList(context),
+//       ),
+//       bottomNavigationBar: BottomNavigationBar(
+//         currentIndex: currentIndex,
+//         onTap: (index) {
+//           setState(() {
+//             currentIndex = index;
+//           });
 
-          tabController.animateTo(currentIndex);
-        },
-        items: [
-          BottomNavigationBarItem(
-            title: Text("Meus vídeos",
-                style: TextStyle(
-                    color: currentIndex == 0
-                        ? MyColors.primaryColor
-                        : MyColors.grey,
-                    fontSize: 18)),
-            icon: Icon(Icons.video_library, color: MyColors.grey),
-            activeIcon: Icon(Icons.video_library, color: MyColors.primaryColor),
-          ),
-          BottomNavigationBarItem(
-            title: Text("Configurações",
-                style: TextStyle(
-                    color: currentIndex == 1
-                        ? MyColors.primaryColor
-                        : MyColors.grey,
-                    fontSize: 18)),
-            icon: Icon(Icons.settings, color: MyColors.grey),
-            activeIcon: Icon(Icons.settings, color: MyColors.primaryColor),
-          )
-        ],
-      ),
-    );
-  }
-}
+//           tabController.animateTo(currentIndex);
+//         },
+//         items: [
+//           BottomNavigationBarItem(
+//             title: Text("Meus vídeos",
+//                 style: TextStyle(
+//                     color: currentIndex == 0
+//                         ? MyColors.primaryColor
+//                         : MyColors.grey,
+//                     fontSize: 18)),
+//             icon: Icon(Icons.video_library, color: MyColors.grey),
+//             activeIcon: Icon(Icons.video_library, color: MyColors.primaryColor),
+//           ),
+//           BottomNavigationBarItem(
+//             title: Text("Configurações",
+//                 style: TextStyle(
+//                     color: currentIndex == 1
+//                         ? MyColors.primaryColor
+//                         : MyColors.grey,
+//                     fontSize: 18)),
+//             icon: Icon(Icons.settings, color: MyColors.grey),
+//             activeIcon: Icon(Icons.settings, color: MyColors.primaryColor),
+//           )
+//         ],
+//       ),
+//     );
+//   }
+// }
 
-class _PlayPauseOverlay extends StatelessWidget {
-  const _PlayPauseOverlay({Key key, this.controller}) : super(key: key);
+// class _PlayPauseOverlay extends StatelessWidget {
+//   const _PlayPauseOverlay({Key key, this.controller}) : super(key: key);
 
-  final VideoPlayerController controller;
+//   final VideoPlayerController controller;
 
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: <Widget>[
-        AnimatedSwitcher(
-          duration: Duration(milliseconds: 50),
-          reverseDuration: Duration(milliseconds: 200),
-          child: controller.value.isPlaying
-              ? SizedBox.shrink()
-              : Container(
-                  color: Colors.black26,
-                  child: Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 100.0,
-                    ),
-                  ),
-                ),
-        ),
-        GestureDetector(
-          onTap: () {
-            controller.value.isPlaying ? controller.pause() : controller.play();
-          },
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Stack(
+//       children: <Widget>[
+//         AnimatedSwitcher(
+//           duration: Duration(milliseconds: 50),
+//           reverseDuration: Duration(milliseconds: 200),
+//           child: controller.value.isPlaying
+//               ? SizedBox.shrink()
+//               : Container(
+//                   color: Colors.black26,
+//                   child: Center(
+//                     child: Icon(
+//                       Icons.play_arrow,
+//                       color: Colors.white,
+//                       size: 100.0,
+//                     ),
+//                   ),
+//                 ),
+//         ),
+//         GestureDetector(
+//           onTap: () {
+//             controller.value.isPlaying ? controller.pause() : controller.play();
+//           },
+//         ),
+//       ],
+//     );
+//   }
+// }
