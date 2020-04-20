@@ -136,9 +136,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   _setDataToResultPage(var videoId, _callResultPage) async
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      userId = prefs.getString('userId');
-    });
+    prefs.setString('videoId', videoId);
 
     _callResultPage();
   }
