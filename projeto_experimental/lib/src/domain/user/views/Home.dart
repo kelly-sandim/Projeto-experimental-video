@@ -63,49 +63,37 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                                 children: <Widget>[
                                   new ListTile(
                                     leading: mediaGeral,
-                                    title: Text("$videoDate\n", style: TextStyle(
-                                                  fontSize: 20, 
+                                    title: Text("$videoDate", style: TextStyle(
+                                                  fontSize: 16, 
                                                   color: MyColors.grey,
                                                   fontWeight: FontWeight.bold, 
                                                 ),),
-                                    subtitle: Text(videoName, style: TextStyle(
-                                                  fontSize: 15, 
+                                    subtitle: Text("$videoName", style: TextStyle(
+                                                  fontSize: 13, 
                                                   color: MyColors.primaryColor,
                                                   fontWeight: FontWeight.bold, 
                                                 ),),
-                                    onTap: () {
-                                      
-                                    },
-                                  ),
-                                  ],
-                                ),
-                                Row(children: <Widget>[
-                                  ButtonTheme(                                    
-                                    child: ButtonBar(
-                                      layoutBehavior: ButtonBarLayoutBehavior.constrained,
-                                      alignment: MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        FlatButton(
-                                          child: const Text('RESULTADO DA ANÁLISE',
-                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15),
-                                          ),
+                                    trailing: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: <Widget>[                                        
+                                        IconButton(
+                                          icon: Image.asset('./lib/src/assets/images/statistics.png', width: 25, height: 25, color: MyColors.primaryColor),
                                           onPressed: () {
                                             _setDataToResultPage(videoId, _callResultPage);
                                           },
                                         ),
-                                        FlatButton(
-                                          child: const Text('ASSISTIR VÍDEO',
-                                          style: TextStyle(color: MyColors.primaryColor, fontSize: 15),
-                                          ),
+                                        IconButton(
+                                          icon: Icon(Icons.play_arrow, size: 25, color: MyColors.primaryColor,),
                                           onPressed: () {
                                             _setDataToVideoPlayerPage(videoId, _callVideoPlayerPage);
                                           },
-                                        ),
+                                        ),                                           
                                       ],
                                     ),
-                                  ), 
+                                  ),
+                                  
                                 ],
-                              ),
+                              ),                                
                             ],
                           ),
                         );
@@ -119,8 +107,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           child: ListView(
             children: <Widget>[
               new UserAccountsDrawerHeader(
-                accountName: new Text("Olá, $userName!", style: TextStyle(fontSize: 21, color: MyColors.grey)),
-                accountEmail: new Text(userEmail, style: TextStyle(fontSize: 16, color: MyColors.grey),),
+                accountName: new Text("Olá, $userName!", style: TextStyle(fontSize: 18, color: MyColors.grey)),
+                accountEmail: new Text(userEmail, style: TextStyle(fontSize: 15, color: MyColors.grey),),
               
                 currentAccountPicture: new GestureDetector(
                   child: new CircleAvatar(
@@ -137,7 +125,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   "Logout",
                   style: TextStyle(
                       color: MyColors.primaryColor,
-                      fontSize: 18,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
                 leading: new Icon(Icons.power_settings_new,
@@ -217,14 +205,14 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           var mediaText = item['medias_text'];
           var mediaGeral = (mediaVoice + mediaImage + mediaText)/3;
           if((mediaGeral) < 0.33){
-            dataD = Image.asset('./lib/src/assets/images/frowning-face.png', width: 50, height: 50);
+            dataD = Image.asset('./lib/src/assets/images/frowning-face.png', width: 40, height: 40);
           }
           else if((mediaGeral) >= 0.33 && (mediaGeral) < 0.6){
-            dataD = Image.asset('./lib/src/assets/images/neutral-face.png', width: 50, height: 50);
+            dataD = Image.asset('./lib/src/assets/images/neutral-face.png', width: 40, height: 40);
           }
           else
           {
-            dataD = Image.asset('./lib/src/assets/images/smiling-face.png', width: 50, height: 50);
+            dataD = Image.asset('./lib/src/assets/images/smiling-face.png', width: 40, height: 40);
           }
           videoData.addAll({'Id do Video':dataA, 'Data do Video':dataB, 'Nome do Video':dataC, 'Media Geral':dataD});
           jsonEntry.add(videoData);
