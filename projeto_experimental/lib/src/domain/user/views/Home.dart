@@ -28,9 +28,9 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
  
   String messageError;
   bool isLoading = true;
-  var userId;
-  var userName;
-  var userEmail;
+  var userId = "";
+  var userName = "";
+  var userEmail = "";
 
   List<Widget> tabList(BuildContext context) {
     List<Widget> _tabList = [
